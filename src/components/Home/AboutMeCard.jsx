@@ -1,0 +1,184 @@
+import { Icon } from '@iconify/react';
+
+export default function AboutMeCard()
+{
+    return (
+        <div className='relative flex justify-center items-center px-[3%] pb-0'>
+            <section
+                id="about"
+                className="flex flex-col justify-center items-start text-left w-[70%] bg-[var(--background)] rounded-2xl px-[3%] py-[5rem] relative z-10 max-lg:w-[90%] max-md:px-[4%] max-md:py-12 max-md:mt-12"
+            >
+                {/* About Me Text Section */}
+                <div className='w-full mb-12'>
+                    <h2 className='text-[var(--text-color)] text-[3.5rem] max-md:text-[2.5rem] font-bold font-mono mb-8'>
+                        About Me
+                    </h2>
+                    <p className='text-[var(--text-color)] text-[2rem] max-md:text-[1.5rem] font-normal leading-relaxed '>
+                        I am Wilson Shang. A full-stack developer. I graduated from Rice
+                        University with Master of Computer Science degree.
+                        <br />
+                        I love Coding, Sports, Gaming, Basketball, Cooking...
+                    </p>
+                </div>
+
+                {/* Skills Section */}
+                <div className='w-full'>
+                    <h3 className='text-[var(--text-color)] text-[3rem] max-md:text-[2rem] font-bold mb-8'>
+                        My Skills
+                    </h3>
+
+                    {/* Frontend Skills */}
+                    <div className='mb-10'>
+                        <h4 className='text-[var(--text-color)] text-[2rem] max-md:text-[1.5rem] font-semibold mb-6'>
+                            Frontend
+                        </h4>
+                        <ul className='list-disc list-inside space-y-4 text-[2rem] max-md:text-base'>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <Icon
+                                        icon="skill-icons:javascript"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>Javascript(ES6+), Proficient for develop +</span>
+                                    <Icon
+                                        icon="skill-icons:html"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>HTML5 +</span>
+                                    <Icon
+                                        icon="skill-icons:css"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>CSS3</span>
+                                </div>
+                            </li>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <Icon
+                                        icon="skill-icons:react-dark"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>React +</span>
+                                    <Icon
+                                        icon="logos:nextjs-icon"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>Next.js +</span>
+                                    <Icon
+                                        icon="skill-icons:typescript"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>TypeScript</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Backend Skills */}
+                    <div className='mb-10'>
+                        <h4 className='text-[var(--text-color)] text-[2rem] max-md:text-[1.5rem] font-semibold mb-6'>
+                            Backend
+                        </h4>
+                        <ul className='list-disc list-inside space-y-4 text-[2rem] max-md:text-base'>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <Icon
+                                        icon="skill-icons:nodejs-dark"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>Node.js (CRUD proficient)</span>
+                                    <Icon
+                                        icon="devicon:python"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>Python (general, Flask, ml/ds, leetcode)</span>
+                                    <Icon
+                                        icon="skill-icons:java-light"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>Java</span>
+                                    <Icon
+                                        icon="devicon:cplusplus"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>C++ (college oop, algo & graph)</span>
+                                </div>
+                            </li>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <Icon
+                                        icon="skill-icons:mysql-light"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>MySQL</span>
+                                    <Icon
+                                        icon="skill-icons:postgresql-dark"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>PostgreSQL</span>
+                                    <Icon
+                                        icon="skill-icons:mongodb"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>MongoDB (Familiar with SQL & NoSQL concepts & develop)</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Other Skills */}
+                    <div className='mb-6'>
+                        <h4 className='text-[var(--text-color)] text-[2rem] max-md:text-[1.5rem] font-semibold mb-6'>
+                            Other
+                        </h4>
+                        <ul className='list-disc list-inside space-y-4 text-[2rem] max-md:text-base'>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <span>Zsh + iTerm2</span>
+                                </div>
+                            </li>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <Icon
+                                        icon="skill-icons:aws-light"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>AWS(EC2,S3,Lambda, RDS, 53) +</span>
+                                    <Icon
+                                        icon="skill-icons:azure-dark"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>AzureSQL +</span>
+                                    <Icon
+                                        icon="devicon:googlecloud"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>GCP</span>
+                                </div>
+                            </li>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <Icon
+                                        icon="icomoon-free:git"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>Git +</span>
+                                    <Icon
+                                        icon="skill-icons:docker"
+                                        className="w-6 h-6"
+                                    />
+                                    <span>Docker + CI/CD Linux</span>
+                                </div>
+                            </li>
+                            <li className='text-[var(--text-color)]'>
+                                <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
+                                    <span>Comfortable pair with ChatGPT + Cursor + Google for problem solving</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    );
+}

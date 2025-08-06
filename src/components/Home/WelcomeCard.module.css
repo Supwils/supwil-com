@@ -1,0 +1,77 @@
+.image_flip_container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 500px;
+  perspective: 800px;
+  margin-left: 2rem;
+}
+
+.image_float {
+  width: 100%;
+  height: 100%;
+  animation: floatImage 4s ease-in-out infinite;
+  /* Apply float animation to the wrapper */
+}
+
+.image_flip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.image_flip_container:hover .image_flip {
+  transform: rotateY(180deg);
+  /* Flip on hover */
+}
+
+.front_img,
+.back_img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.front_img {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.back_img {
+  transform: rotateY(-180deg);
+}
+
+@keyframes floatImage {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-1.4rem);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .image_flip_container {
+    margin-left: 0;
+    max-width: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .image_flip_container {
+    max-width: 250px;
+    height: 250px;
+  }
+}
