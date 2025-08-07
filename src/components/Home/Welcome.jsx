@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Typed from "typed.js";
 import Image from "next/image";
-import styles from "./WelcomeCard.module.css";
+import styles from "./Welcome.module.css";
 
 export default function WelcomeCard()
 {

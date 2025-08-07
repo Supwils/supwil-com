@@ -1,7 +1,7 @@
-import WelcomeCard from '@/components/Home/WelcomeCard';
-import AboutMeCard from '@/components/Home/AboutMeCard';
-import ExprienceCard from '@/components/Home/ExprienceCard';
-import ContactCard from '@/components/Home/ContactCard';
+import WelcomeCard from '@/components/Home/Welcome';
+import AboutMeCard from '@/components/Home/AboutMe';
+import ExprienceCard from '@/components/Home/Exprience';
+import ContactCard from '@/components/Home/Contact';
 import AnimatedSection from '@/components/UI/AnimatedSection';
 
 export default function HomePage() {

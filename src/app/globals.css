@@ -35,7 +35,7 @@ body {
 }
 
 html {
-  font-size: 62.5%;
+  /* font-size: 62.5%; */
   /* Set to 62.5% to make 1rem equal to 10px */
   /* Prevent horizontal scroll */
   scroll-behavior: smooth;

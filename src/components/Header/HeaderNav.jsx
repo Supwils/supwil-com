@@ -36,8 +36,19 @@ const HeaderNav = () => {
     }, 3000);
   };
 
-  // Dropdown animation functions
+  // Dropdown animation functions with improved timing
+  const [dropdownTimers, setDropdownTimers] = useState({});
+
   const showDropdown = (dropdown) => {
+    // Clear any existing hide timer
+    if (dropdownTimers[dropdown]) {
+      clearTimeout(dropdownTimers[dropdown]);
+      setDropdownTimers(prev => ({
+        ...prev,
+        [dropdown]: null
+      }));
+    }
+
     setDropdownStates(prev => ({
       ...prev,
       [dropdown]: { isVisible: true, isAnimating: true }
@@ -53,18 +64,31 @@ const HeaderNav = () => {
   };
 
   const hideDropdown = (dropdown) => {
-    setDropdownStates(prev => ({
-      ...prev,
-      [dropdown]: { ...prev[dropdown], isAnimating: true }
-    }));
-
-    // Delay before hiding for smooth fade out
-    setTimeout(() => {
+    // Set a longer delay before hiding to allow mouse movement
+    const timer = setTimeout(() => {
       setDropdownStates(prev => ({
         ...prev,
-        [dropdown]: { isVisible: false, isAnimating: false }
+        [dropdown]: { ...prev[dropdown], isAnimating: true }
       }));
-    }, 200);
+
+      // Additional delay for fade out animation
+      setTimeout(() => {
+        setDropdownStates(prev => ({
+          ...prev,
+          [dropdown]: { isVisible: false, isAnimating: false }
+        }));
+      }, 200);
+
+      setDropdownTimers(prev => ({
+        ...prev,
+        [dropdown]: null
+      }));
+    }, 300); // Increased delay from 200ms to 300ms
+
+    setDropdownTimers(prev => ({
+      ...prev,
+      [dropdown]: timer
+    }));
   };
 
   // Listen for theme changes and show notification
@@ -92,6 +116,15 @@ const HeaderNav = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(dropdownTimers).forEach(timer => {
+        if (timer) clearTimeout(timer);
+      });
+    };
+  }, [dropdownTimers]);
 
   return (
     <>
@@ -130,7 +163,7 @@ const HeaderNav = () => {
 
           {/* Me Dropdown */}
           <div
-            className="relative"
+            className="relative group"
             onMouseEnter={() => showDropdown('me')}
             onMouseLeave={() => hideDropdown('me')}
           >
@@ -141,11 +174,20 @@ const HeaderNav = () => {
               Me <span className={dropdownStates.me.isVisible ? "hidden" : ""}>🙈</span><span className={dropdownStates.me.isVisible ? "" : "hidden"}>🙉</span>
             </button>
 
+            {/* Invisible hover bridge */}
             <div
-              className={`absolute top-full left-0 mt-2 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.me.isVisible
+              className={`absolute top-full left-0 w-full h-2 ${dropdownStates.me.isVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
+              onMouseEnter={() => showDropdown('me')}
+              onMouseLeave={() => hideDropdown('me')}
+            />
+
+            <div
+              className={`absolute top-full left-0 mt-1 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.me.isVisible
                 ? 'opacity-100 translate-y-0 pointer-events-auto'
                 : 'opacity-0 -translate-y-2 pointer-events-none'
                 } ${dropdownStates.me.isAnimating ? 'transform-gpu' : ''}`}
+              onMouseEnter={() => showDropdown('me')}
+              onMouseLeave={() => hideDropdown('me')}
             >
               <Link href="/#about" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">About</Link>
               <Link href="/#experience" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Experience</Link>
@@ -162,7 +204,7 @@ const HeaderNav = () => {
 
           {/* Explore Dropdown */}
           <div
-            className="relative"
+            className="relative group"
             onMouseEnter={() => showDropdown('explore')}
             onMouseLeave={() => hideDropdown('explore')}
           >
@@ -173,11 +215,20 @@ const HeaderNav = () => {
               Explore <span className={dropdownStates.explore.isVisible ? "hidden" : ""}>🤐</span><span className={dropdownStates.explore.isVisible ? "" : "hidden"}>😆</span>
             </button>
 
+            {/* Invisible hover bridge */}
             <div
-              className={`absolute top-full left-0 mt-2 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.explore.isVisible
+              className={`absolute top-full left-0 w-full h-2 ${dropdownStates.explore.isVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
+              onMouseEnter={() => showDropdown('explore')}
+              onMouseLeave={() => hideDropdown('explore')}
+            />
+
+            <div
+              className={`absolute top-full left-0 mt-1 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.explore.isVisible
                 ? 'opacity-100 translate-y-0 pointer-events-auto'
                 : 'opacity-0 -translate-y-2 pointer-events-none'
                 } ${dropdownStates.explore.isAnimating ? 'transform-gpu' : ''}`}
+              onMouseEnter={() => showDropdown('explore')}
+              onMouseLeave={() => hideDropdown('explore')}
             >
               <Link href="/blog" className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Blogs</Link>
               <Link href="/project" className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Projects</Link>
