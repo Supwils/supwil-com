@@ -3,8 +3,7 @@
 import { useState } from "react";
 import emailjs from "emailjs-com";
 
-export default function ContactCard()
-{
+export default function ContactCard() {
     const [formData, setFormData] = useState({
         fullName: "",
         email: "",
@@ -21,8 +20,7 @@ export default function ContactCard()
         message: false
     });
 
-    const handleChange = (e) =>
-    {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -30,8 +28,7 @@ export default function ContactCard()
         });
 
         // Clear error state when user types in a field
-        if (errors[name])
-        {
+        if (errors[name]) {
             setErrors({
                 ...errors,
                 [name]: false
@@ -39,8 +36,7 @@ export default function ContactCard()
         }
     };
 
-    const handleSubmit = (e) =>
-    {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const { fullName, email, message } = formData;
         let hasErrors = false;
@@ -51,31 +47,26 @@ export default function ContactCard()
         };
 
         // Validate required fields
-        if (!fullName)
-        {
+        if (!fullName) {
             newErrors.fullName = true;
             hasErrors = true;
         }
 
-        if (!email)
-        {
+        if (!email) {
             newErrors.email = true;
             hasErrors = true;
         }
 
-        if (!message)
-        {
+        if (!message) {
             newErrors.message = true;
             hasErrors = true;
         }
 
         setErrors(newErrors);
 
-        if (hasErrors)
-        {
+        if (hasErrors) {
             // Apply shake animation and return early
-            setTimeout(() =>
-            {
+            setTimeout(() => {
                 setErrors({
                     fullName: false,
                     email: false,
@@ -96,8 +87,7 @@ export default function ContactCard()
                 "XT0i9ln5UAkdi5Th3"
             )
             .then(
-                (response) =>
-                {
+                (response) => {
                     setValidationMessage("Message sent successfully!");
                     setMessageType("success");
 
@@ -110,21 +100,18 @@ export default function ContactCard()
                         message: "",
                     });
 
-                    setTimeout(() =>
-                    {
+                    setTimeout(() => {
                         setValidationMessage("");
                         setMessageType("");
                     }, 3000);
                 },
-                (err) =>
-                {
+                (err) => {
                     setValidationMessage(
                         "Failed to send message. Please try again later."
                     );
                     setMessageType("error");
 
-                    setTimeout(() =>
-                    {
+                    setTimeout(() => {
                         setValidationMessage("");
                         setMessageType("");
                     }, 3000);
@@ -140,7 +127,7 @@ export default function ContactCard()
             >
                 {/* Contact Title */}
                 <div className='w-full mb-12'>
-                    <h2 className='text-[var(--text-color)] text-[2.5rem] max-md:text-[1.5rem] font-bold font-mono mb-8'>
+                    <h2 className='text-[var(--text-color)] text-2xl md:text-3xl lg:text-4xl font-bold font-mono mb-8'>
                         Contact <span className='text-[var(--main-color)]'>Me!</span>
                     </h2>
                 </div>
@@ -156,7 +143,7 @@ export default function ContactCard()
                                 placeholder="Name*"
                                 value={formData.fullName}
                                 onChange={handleChange}
-                                className={`flex-1 p-4 text-[1.2rem] text-[var(--text-color)] bg-[var(--background)]  border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20 ${errors.fullName ? 'border-red-500 animate-pulse' : ''
+                                className={`flex-1 p-4 text-base md:text-lg text-[var(--text-color)] bg-[var(--background)]  border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20 ${errors.fullName ? 'border-red-500 animate-pulse' : ''
                                     }`}
                             />
                             <input
@@ -165,7 +152,7 @@ export default function ContactCard()
                                 placeholder="Email*"
                                 value={formData.email}
                                 onChange={handleChange}
-                                className={`flex-1 p-4 text-[1.2rem] text-[var(--text-color)] bg-[var(--background)] border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20 ${errors.email ? 'border-red-500 animate-pulse' : ''
+                                className={`flex-1 p-4 text-base md:text-lg text-[var(--text-color)] bg-[var(--background)] border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20 ${errors.email ? 'border-red-500 animate-pulse' : ''
                                     }`}
                             />
                         </div>
@@ -178,7 +165,7 @@ export default function ContactCard()
                                 placeholder="Phone Number"
                                 value={formData.mobileNumber}
                                 onChange={handleChange}
-                                className='flex-1 p-4 text-[1.2rem] text-[var(--text-color)] bg-[var(--background)]  border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20'
+                                className='flex-1 p-4 text-base md:text-lg text-[var(--text-color)] bg-[var(--background)]  border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20'
                             />
                             <input
                                 type="text"
@@ -186,7 +173,7 @@ export default function ContactCard()
                                 placeholder="Subject"
                                 value={formData.emailSubject}
                                 onChange={handleChange}
-                                className='flex-1 p-4 text-[1.2rem] text-[var(--text-color)] bg-[var(--background)] border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20'
+                                className='flex-1 p-4 text-base md:text-lg text-[var(--text-color)] bg-[var(--background)] border border-[var(--border-color)] rounded-lg transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20'
                             />
                         </div>
 
@@ -198,7 +185,7 @@ export default function ContactCard()
                                 placeholder="Your Message*"
                                 value={formData.message}
                                 onChange={handleChange}
-                                className={`w-full p-4 text-[1.2rem] text-[var(--text-color)] bg-[var(--background)] border border-[var(--border-color)] rounded-lg resize-none transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20 ${errors.message ? 'border-red-500 animate-pulse' : ''
+                                className={`w-full p-4 text-base md:text-lg text-[var(--text-color)] bg-[var(--background)] border border-[var(--border-color)] rounded-lg resize-none transition-all duration-300 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)] focus:ring-opacity-20 ${errors.message ? 'border-red-500 animate-pulse' : ''
                                     }`}
                             />
                         </div>
@@ -207,14 +194,14 @@ export default function ContactCard()
                         <div className='flex flex-col items-start'>
                             <button
                                 type="submit"
-                                className='px-8 py-4 bg-[var(--main-color)] text-white rounded-lg text-[1.2rem] font-semibold transition-all duration-300 hover:bg-opacity-90 hover:shadow-lg hover:shadow-[var(--main-color)]/2 focus:outline-none focus:ring-1 focus:ring-[var(--main-color)] focus:ring-opacity-30'
+                                className='px-8 py-4 bg-[var(--main-color)] text-white rounded-lg text-base md:text-lg font-semibold transition-all duration-300 hover:bg-opacity-90 hover:shadow-lg hover:shadow-[var(--main-color)]/2 focus:outline-none focus:ring-1 focus:ring-[var(--main-color)] focus:ring-opacity-30'
                             >
                                 Send Message
                             </button>
 
                             {/* Validation Message */}
                             {validationMessage && (
-                                <div className={`mt-4 p-3 rounded-lg text-[1.1rem] font-medium transition-all duration-300 ${messageType === "success"
+                                <div className={`mt-4 p-3 rounded-lg text-sm md:text-base font-medium transition-all duration-300 ${messageType === "success"
                                     ? 'bg-green-100 text-green-800 border border-green-200'
                                     : 'bg-red-100 text-red-800 border border-red-200'
                                     }`}>

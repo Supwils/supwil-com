@@ -130,7 +130,7 @@ const HeaderNav = () => {
     <>
       {/* Notification Toast */}
       {notification.show && (
-        <div className={`fixed top-5 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-[1000] min-w-[250px] text-center font-medium text-base transition-all duration-300 ${notification.type === 'success'
+        <div className={`fixed top-0 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg z-[1000] min-w-[250px] text-center font-medium text-sm md:text-base transition-all duration-300 ${notification.type === 'success'
           ? 'bg-green-500 text-white'
           : 'bg-red-500 text-white'
           }`}>
@@ -138,14 +138,14 @@ const HeaderNav = () => {
         </div>
       )}
 
-      <header className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[65%] px-8 py-4 bg-[var(--background)] flex justify-between items-center z-[100] border border-[var(--border-color)] rounded-3xl backdrop-blur-md bg-opacity-80 shadow-lg transition-all duration-300 max-md:w-[95%] max-md:px-4 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
-        <Link href="/" className="text-[2.2rem] text-[var(--text-color)] font-bold hover:text-[var(--main-color)] transition-all duration-300 hover:scale-105">
+      <header className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-[65%] px-8 py-4 bg-[var(--background)] flex justify-between items-center z-[100] border border-[var(--border-color)] rounded-3xl backdrop-blur-md bg-opacity-80 shadow-lg transition-all duration-300 max-md:w-[95%] max-md:px-4 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
+        <Link href="/" className="text-xl md:text-2xl lg:text-3xl text-[var(--text-color)] font-bold hover:text-[var(--main-color)] transition-all duration-300 hover:scale-105">
           Swil.
         </Link>
 
         {/* Hamburger Menu Icon */}
         <div
-          className="hidden max-md:block text-2xl cursor-pointer text-[var(--text-color)] hover:text-[var(--main-color)] transition-colors duration-300"
+          className="hidden max-md:block text-xl cursor-pointer text-[var(--text-color)] hover:text-[var(--main-color)] transition-colors duration-300"
           onClick={toggleMenu}
         >
           ☰
@@ -156,7 +156,7 @@ const HeaderNav = () => {
 
           <Link
             href="/"
-            className="text-[1.5rem] font-semibold text-[var(--main-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
+            className="text-lg md:text-xl font-semibold text-[var(--main-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
           >
             Home
           </Link>
@@ -169,7 +169,7 @@ const HeaderNav = () => {
           >
             <button
               onClick={handleClick}
-              className="text-[1.5rem] font-semibold text-[var(--text-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
+              className="text-base md:text-xl font-semibold text-[var(--text-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
             >
               Me <span className={dropdownStates.me.isVisible ? "hidden" : ""}>🙈</span><span className={dropdownStates.me.isVisible ? "" : "hidden"}>🙉</span>
             </button>
@@ -189,13 +189,13 @@ const HeaderNav = () => {
               onMouseEnter={() => showDropdown('me')}
               onMouseLeave={() => hideDropdown('me')}
             >
-              <Link href="/#about" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">About</Link>
-              <Link href="/#experience" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Experience</Link>
-              <Link href="/#contact" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Contact</Link>
-              <Link href="/Personal/Lifestyle" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Lifestyle</Link>
+              <Link href="/#about" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">About</Link>
+              <Link href="/#experience" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Experience</Link>
+              <Link href="/#contact" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Contact</Link>
+              <Link href="/Personal/Lifestyle" onClick={handleClick} className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Lifestyle</Link>
               <button
                 onClick={handleClick}
-                className="block w-full text-left text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 border-none bg-none cursor-pointer hover:pl-6"
+                className="block w-full text-left text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 border-none bg-none cursor-pointer hover:pl-6"
               >
                 {isAdmin ? 'Admin Logout' : 'Admin Login'}
               </button>
@@ -210,7 +210,7 @@ const HeaderNav = () => {
           >
             <button
               onClick={handleClick}
-              className="text-[1.5rem] font-semibold text-[var(--text-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
+              className="text-base md:text-xl font-semibold text-[var(--text-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
             >
               Explore <span className={dropdownStates.explore.isVisible ? "hidden" : ""}>🤐</span><span className={dropdownStates.explore.isVisible ? "" : "hidden"}>😆</span>
             </button>
@@ -230,15 +230,15 @@ const HeaderNav = () => {
               onMouseEnter={() => showDropdown('explore')}
               onMouseLeave={() => hideDropdown('explore')}
             >
-              <Link href="/blog" className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Blogs</Link>
-              <Link href="/project" className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Projects</Link>
-              <Link href="/resource" className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Resources</Link>
-              <Link href="/demo/solarsystem3js" className="block text-[var(--text-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">3D Solar System</Link>
+              <Link href="/blog" className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Blogs</Link>
+              <Link href="/project" className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Projects</Link>
+              <Link href="/resource" className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">Resources</Link>
+              <Link href="/demo/solarsystem3js" className="block text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6">3D Solar System</Link>
               {isAdmin && (
                 <Link
                   href="/BlogAdmin"
                   onClick={handleClick}
-                  className="block text-[var(--main-color)] px-5 py-3 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 font-medium relative before:content-['🔐'] before:mr-2 hover:pl-6"
+                  className="block text-[var(--main-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 font-medium relative before:content-['🔐'] before:mr-2 hover:pl-6"
                 >
                   Blog Admin
                 </Link>
@@ -255,7 +255,7 @@ const HeaderNav = () => {
           <div className="ml-2">
             <button
               onClick={handleClick}
-              className="px-4 py-2 bg-[var(--background)] bg-opacity-50 text-[var(--text-color)] rounded-xl text-sm font-semibold hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105 border border-[var(--border-color)]"
+              className="px-4 py-2 bg-[var(--background)] bg-opacity-50 text-[var(--text-color)] rounded-xl text-sm md:text-base font-semibold hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105 border border-[var(--border-color)]"
             >
               EN
             </button>
@@ -271,23 +271,23 @@ const HeaderNav = () => {
             <Link
               href="/#home"
               onClick={handleClick}
-              className="text-[1.2rem] font-bold text-[var(--main-color)] py-3 px-6 hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200"
+              className="text-base font-bold text-[var(--main-color)] py-3 px-6 hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200"
             >
               Home
             </Link>
 
             {/* Mobile Me Section */}
             <div className="border-t border-[var(--border-color)] mt-2 pt-2">
-              <div className="text-[1.2rem] font-bold text-[var(--text-color)] py-2 px-6">
+              <div className="text-lg font-bold text-[var(--text-color)] py-2 px-6">
                 Me 🙈
               </div>
-              <Link href="/#about" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">About</Link>
-              <Link href="/#experience" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Experience</Link>
-              <Link href="/#contact" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Contact</Link>
-              <Link href="/Personal/Lifestyle" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Lifestyle</Link>
+              <Link href="/#about" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">About</Link>
+              <Link href="/#experience" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Experience</Link>
+              <Link href="/#contact" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Contact</Link>
+              <Link href="/Personal/Lifestyle" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Lifestyle</Link>
               <button
                 onClick={handleClick}
-                className="block w-full text-left text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200 border-none bg-none cursor-pointer"
+                className="block w-full text-left text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200 border-none bg-none cursor-pointer"
               >
                 {isAdmin ? 'Admin Logout' : 'Admin Login'}
               </button>
@@ -295,17 +295,17 @@ const HeaderNav = () => {
 
             {/* Mobile Explore Section */}
             <div className="border-t border-[var(--border-color)] mt-2 pt-2">
-              <div className="text-[1.2rem] font-bold text-[var(--text-color)] py-2 px-6">
+              <div className="text-lg font-bold text-[var(--text-color)] py-2 px-6">
                 Explore 🤐
               </div>
-              <Link href="/blog" className="block text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Blogs</Link>
-              <Link href="/project" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Projects</Link>
-              <Link href="/resource" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Resources</Link>
+              <Link href="/blog" className="block text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Blogs</Link>
+              <Link href="/project" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Projects</Link>
+              <Link href="/resource" onClick={handleClick} className="block text-[var(--text-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200">Resources</Link>
               {isAdmin && (
                 <Link
                   href="/BlogAdmin"
                   onClick={handleClick}
-                  className="block text-[var(--main-color)] py-2 px-8 text-[1.1rem] hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200 font-medium"
+                  className="block text-[var(--main-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200 font-medium"
                 >
                   🔐 Blog Admin
                 </Link>
@@ -320,7 +320,7 @@ const HeaderNav = () => {
               {/* Translate */}
               <button
                 onClick={handleClick}
-                className="px-3 py-1 bg-[var(--background)] bg-opacity-30 text-[var(--text-color)] rounded-lg text-sm font-medium hover:bg-[var(--main-color)] hover:text-white transition-colors duration-300"
+                className="px-3 py-1 bg-[var(--background)] bg-opacity-30 text-[var(--text-color)] rounded-lg text-base font-medium hover:bg-[var(--main-color)] hover:text-white transition-colors duration-300"
               >
                 EN
               </button>

@@ -102,7 +102,7 @@ export default function ExprienceCard() {
                     className="flex flex-col items-center mb-16 max-lg:mb-12 max-md:mb-8"
                 >
                     <motion.h2
-                        className="text-[4rem] max-lg:text-[3.5rem] max-md:text-[2.5rem] max-sm:text-[2rem] font-bold mb-4 bg-gradient-to-r from-[var(--text-color)] to-[var(--main-color)] bg-clip-text text-transparent"
+                        className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-[var(--text-color)] to-[var(--main-color)] bg-clip-text text-transparent"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                     >
