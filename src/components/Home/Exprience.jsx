@@ -10,37 +10,46 @@ export default function ExprienceCard() {
             role: "Software Engineer",
             time: "2025",
             description: "Developed a web application for Agentiq Capital to manage their portfolio and investments.",
-            imageUrl: "/images/agentiq.jpg"
+            imageUrl: "/images/agentiq.jpg",
+            order: 1
         },
         {
             company: "Learfield",
             role: "Software Engineer Intern",
             time: "Summer 2024",
             description: "Developed steaming data analytics tool integrated with the company main service to provide real-time data analysis and insights for their clients.",
-            imageUrl: "/images/learfield.jpg"
-        },
-        {
-            company: "Sidearm Sports",
-            role: "Web Developer & Data Imports",
-            time: " Summer 2022 and 2023",
-            description: "Providing web solutions for collegiate clients such as OSU, FSU, for their athletic websites, including build up web components, data imports, validation for smooth project delivery.",
-            imageUrl: "/images/sidearm.png"
+            imageUrl: "/images/learfield.jpg",
+            order: 2
         },
         {
             company: "Rice University",
             role: "Master of Computer Science",
             time: "2024",
             description: "Coursework focused on Machine Learning, Web Development, Programming Principles with hands on projects and group works",
-            imageUrl: "/images/riceu.png"
+            imageUrl: "/images/riceu.png",
+            order: 3
         },
+        {
+            company: "Sidearm Sports",
+            role: "Web Developer & Data Imports",
+            time: " Summer 2022 and 2023",
+            description: "Providing web solutions for collegiate clients such as OSU, FSU, for their athletic websites, including build up web components, data imports, validation for smooth project delivery.",
+            imageUrl: "/images/sidearm.png",
+            order: 4
+        },
+        
         {
             company: "Syracuse University",
             role: "Bachelor of Science in Computer Science",
             time: "2019-2022",
             description: "General Computer Science study including Data Structures, Programming Languages, Database, Software Engineering",
-            imageUrl: "/images/su.jpg"
+            imageUrl: "/images/su.jpg",
+            order: 5
         }
     ];
+
+    // Sort experiences by order property
+    const sortedExperience = [...experience].sort((a, b) => a.order - b.order);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -94,7 +103,7 @@ export default function ExprienceCard() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
         >
-            <section id="experience" className="flex flex-col justify-center items-center text-center w-[85%] max-w-7xl bg-[var(--background)] rounded-3xl px-[4%] py-[6rem] max-lg:py-[4rem] max-md:py-[3rem] relative z-10 max-lg:w-[95%] max-md:px-[5%] backdrop-blur-sm bg-opacity-95 border border-[var(--border-color)] shadow-2xl">
+            <section id="experience" className="flex flex-col justify-center items-center text-center w-[70%] max-w-7xl bg-[var(--background)] rounded-3xl px-[4%] py-[6rem] max-lg:py-[4rem] max-md:py-[3rem] relative max-lg:w-[95%] max-md:px-[5%] backdrop-blur-sm bg-opacity-95 border border-[var(--border-color)] shadow-sm">
 
                 {/* Animated Title */}
                 <motion.div
@@ -121,18 +130,18 @@ export default function ExprienceCard() {
                     {/* Central Timeline Line */}
                     <motion.div
                         className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-[var(--main-color)] via-[var(--main-color)] to-transparent rounded-full max-md:hidden"
-                        style={{ height: `${experience.length * 200 - 50}px` }}
+                        style={{ height: `${sortedExperience.length * 300}px` }}
                         variants={timelineVariants}
                         transformOrigin="top"
                     />
 
                     {/* Experience Items */}
                     <div className="flex flex-col space-y-12 max-lg:space-y-10 max-md:space-y-8">
-                        {experience.map((item, index) => {
+                        {sortedExperience.map((item, index) => {
                             const isLeft = index % 2 === 0;
 
                             return (
-                                <div key={index} className="relative flex items-center justify-center">
+                                <div key={item.order} className="relative flex items-center justify-center">
 
                                     {/* Timeline Node */}
                                     <motion.div
@@ -165,8 +174,9 @@ export default function ExprienceCard() {
 
                                     {/* Connection Line to Timeline */}
                                     <motion.div
-                                        className={`absolute top-1/2 w-8 h-0.5 bg-[var(--main-color)] opacity-30 max-md:hidden ${isLeft ? 'right-1/2 mr-3' : 'left-1/2 ml-3'
-                                            }`}
+                                        className={`absolute top-1/2 w-8 h-0.5 bg-[var(--main-color)] opacity-30 max-md:hidden ${
+                                            isLeft ? 'right-1/2 mr-3' : 'left-1/2 ml-3'
+                                        }`}
                                         initial={{ scaleX: 0 }}
                                         whileInView={{ scaleX: 1 }}
                                         viewport={{ once: true }}

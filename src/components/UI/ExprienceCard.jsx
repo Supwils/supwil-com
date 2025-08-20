@@ -83,7 +83,7 @@ export default function ExprienceItem({ company, role, time, description, imageU
 
                     <div className="flex-1 min-w-0">
                         <motion.h3
-                            className="text-[var(--text-color)] text-2xl max-lg:text-xl max-md:text-lg font-bold mb-1 group-hover:text-[var(--main-color)] transition-colors duration-300"
+                            className="text-left text-[var(--text-color)] text-2xl max-lg:text-xl max-md:text-lg font-bold mb-1 group-hover:text-[var(--main-color)] transition-colors duration-300"
                             animate={isHovered ? { x: 4 } : { x: 0 }}
                             transition={{ duration: 0.3 }}
                         >
@@ -103,7 +103,7 @@ export default function ExprienceItem({ company, role, time, description, imageU
                     transition={{ duration: 0.3 }}
                     className="pl-20 max-lg:pl-18 max-md:pl-16 max-sm:pl-0"
                 >
-                    <p className="text-[var(--text-color)] text-base max-lg:text-sm max-md:text-sm leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                    <p className="text-left text-[var(--text-color)] text-base max-lg:text-sm max-md:text-sm leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity duration-300">
                         {description}
                     </p>
                 </motion.div>

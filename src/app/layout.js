@@ -3,8 +3,10 @@ import "./globals.css";
 import HeaderNav from "@/components/Header/HeaderNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import MusicPlayer from "@/components/MusicPlayer";
+import Footer from "@/components/Footer/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import FloatingAdminButton from "@/components/Auth/FloatingAdminButton";
+import Chat from "@/components/Home/Chat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,9 +43,11 @@ export default function RootLayout({ children }) {
               {children}
             </main>
             <MusicPlayer />
+            <Chat />
             <FloatingAdminButton />
+            <Footer />
           </AuthProvider>
-        </ThemeProvider>
+  </ThemeProvider>
       </body>
     </html>
   );

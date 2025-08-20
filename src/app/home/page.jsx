@@ -1,10 +1,37 @@
+'use client';
+
+import { useEffect } from 'react';
 import WelcomeCard from '@/components/Home/Welcome';
 import AboutMeCard from '@/components/Home/AboutMe';
 import ExprienceCard from '@/components/Home/Exprience';
 import ContactCard from '@/components/Home/Contact';
 import AnimatedSection from '@/components/UI/AnimatedSection';
+import ViewCounter from '@/components/UI/ViewCounter';
 
 export default function HomePage() {
+    useEffect(() => {
+        // Track page view when component mounts
+        const trackPageView = async () => {
+            try {
+                const response = await fetch('/api/views', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ page: 'home' }),
+                });
+                
+                if (!response.ok) {
+                    console.warn('Failed to track page view');
+                }
+            } catch (error) {
+                console.warn('Error tracking page view:', error);
+            }
+        };
+        
+        trackPageView();
+    }, []);
+    
     return (
         <div className="min-h-screen">
             <AnimatedSection direction="fade" duration={0.8}>
@@ -22,6 +49,8 @@ export default function HomePage() {
             <AnimatedSection direction="scale" delay={0.3} duration={0.8}>
                 <ContactCard />
             </AnimatedSection>
+
+            {/* <ViewCounter /> */}
         </div>
     )
 }
