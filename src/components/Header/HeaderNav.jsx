@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -14,9 +14,10 @@ const HeaderNav = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [dropdownStates, setDropdownStates] = useState({
-    me: { isVisible: false, isAnimating: false },
-    explore: { isVisible: false, isAnimating: false }
+    me: false,
+    explore: false
   });
+  const dropdownTimers = useRef({ me: null, explore: null });
   const { theme } = useTheme();
 
   const toggleMenu = () => {
@@ -37,58 +38,21 @@ const HeaderNav = () => {
   };
 
   // Dropdown animation functions with improved timing
-  const [dropdownTimers, setDropdownTimers] = useState({});
-
   const showDropdown = (dropdown) => {
-    // Clear any existing hide timer
-    if (dropdownTimers[dropdown]) {
-      clearTimeout(dropdownTimers[dropdown]);
-      setDropdownTimers(prev => ({
-        ...prev,
-        [dropdown]: null
-      }));
+    if (dropdownTimers.current[dropdown]) {
+      clearTimeout(dropdownTimers.current[dropdown]);
+      dropdownTimers.current[dropdown] = null;
     }
-
-    setDropdownStates(prev => ({
-      ...prev,
-      [dropdown]: { isVisible: true, isAnimating: true }
-    }));
-
-    // Small delay for smooth animation
-    setTimeout(() => {
-      setDropdownStates(prev => ({
-        ...prev,
-        [dropdown]: { ...prev[dropdown], isAnimating: false }
-      }));
-    }, 150);
+    setDropdownStates(prev => ({ ...prev, [dropdown]: true }));
   };
 
   const hideDropdown = (dropdown) => {
-    // Set a longer delay before hiding to allow mouse movement
-    const timer = setTimeout(() => {
-      setDropdownStates(prev => ({
-        ...prev,
-        [dropdown]: { ...prev[dropdown], isAnimating: true }
-      }));
-
-      // Additional delay for fade out animation
-      setTimeout(() => {
-        setDropdownStates(prev => ({
-          ...prev,
-          [dropdown]: { isVisible: false, isAnimating: false }
-        }));
-      }, 200);
-
-      setDropdownTimers(prev => ({
-        ...prev,
-        [dropdown]: null
-      }));
-    }, 300); // Increased delay from 200ms to 300ms
-
-    setDropdownTimers(prev => ({
-      ...prev,
-      [dropdown]: timer
-    }));
+    if (dropdownTimers.current[dropdown]) {
+      clearTimeout(dropdownTimers.current[dropdown]);
+    }
+    dropdownTimers.current[dropdown] = setTimeout(() => {
+      setDropdownStates(prev => ({ ...prev, [dropdown]: false }));
+    }, 80);
   };
 
   // Listen for theme changes and show notification
@@ -120,11 +84,11 @@ const HeaderNav = () => {
   // Cleanup timers on unmount
   useEffect(() => {
     return () => {
-      Object.values(dropdownTimers).forEach(timer => {
+      Object.values(dropdownTimers.current).forEach(timer => {
         if (timer) clearTimeout(timer);
       });
     };
-  }, [dropdownTimers]);
+  }, []);
 
   return (
     <>
@@ -154,7 +118,7 @@ const HeaderNav = () => {
         {/* Desktop Navbar Links */}
         <nav className="flex items-center gap-6 max-md:hidden">
 
-          <Link
+          <Lik
             href="/"
             className="text-lg md:text-xl font-semibold text-[var(--main-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
           >
@@ -171,21 +135,20 @@ const HeaderNav = () => {
               onClick={handleClick}
               className="text-base md:text-xl font-semibold text-[var(--text-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
             >
-              Me <span className={dropdownStates.me.isVisible ? "hidden" : ""}>🙈</span><span className={dropdownStates.me.isVisible ? "" : "hidden"}>🙉</span>
+              Me <span className={dropdownStates.me ? "hidden" : ""}>🙈</span><span className={dropdownStates.me ? "" : "hidden"}>🙉</span>
             </button>
 
-            {/* Invisible hover bridge */}
+            {/* Invisible hover bridge - increased height for better tolerance */}
             <div
-              className={`absolute top-full left-0 w-full h-2 ${dropdownStates.me.isVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
+              className={`absolute top-full left-0 w-full h-4 ${dropdownStates.me ? 'pointer-events-auto' : 'pointer-events-none'}`}
               onMouseEnter={() => showDropdown('me')}
               onMouseLeave={() => hideDropdown('me')}
             />
 
             <div
-              className={`absolute top-full left-0 mt-1 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.me.isVisible
+              className={`absolute top-full left-0 mt-1 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.me
                 ? 'opacity-100 translate-y-0 pointer-events-auto'
-                : 'opacity-0 -translate-y-2 pointer-events-none'
-                } ${dropdownStates.me.isAnimating ? 'transform-gpu' : ''}`}
+                : 'opacity-0 -translate-y-2 pointer-events-none'}`}
               onMouseEnter={() => showDropdown('me')}
               onMouseLeave={() => hideDropdown('me')}
             >
@@ -212,21 +175,20 @@ const HeaderNav = () => {
               onClick={handleClick}
               className="text-base md:text-xl font-semibold text-[var(--text-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
             >
-              Explore <span className={dropdownStates.explore.isVisible ? "hidden" : ""}>🤐</span><span className={dropdownStates.explore.isVisible ? "" : "hidden"}>😆</span>
+              Explore <span className={dropdownStates.explore ? "hidden" : ""}>🤐</span><span className={dropdownStates.explore ? "" : "hidden"}>😆</span>
             </button>
 
-            {/* Invisible hover bridge */}
+            {/* Invisible hover bridge - increased height for better tolerance */}
             <div
-              className={`absolute top-full left-0 w-full h-2 ${dropdownStates.explore.isVisible ? 'pointer-events-auto' : 'pointer-events-none'}`}
+              className={`absolute top-full left-0 w-full h-4 ${dropdownStates.explore ? 'pointer-events-auto' : 'pointer-events-none'}`}
               onMouseEnter={() => showDropdown('explore')}
               onMouseLeave={() => hideDropdown('explore')}
             />
 
             <div
-              className={`absolute top-full left-0 mt-1 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.explore.isVisible
+              className={`absolute top-full left-0 mt-1 bg-[var(--background)] min-w-[180px] shadow-xl z-10 rounded-xl overflow-hidden border border-[var(--border-color)] backdrop-blur-md bg-opacity-95 transition-all duration-300 ${dropdownStates.explore
                 ? 'opacity-100 translate-y-0 pointer-events-auto'
-                : 'opacity-0 -translate-y-2 pointer-events-none'
-                } ${dropdownStates.explore.isAnimating ? 'transform-gpu' : ''}`}
+                : 'opacity-0 -translate-y-2 pointer-events-none'}`}
               onMouseEnter={() => showDropdown('explore')}
               onMouseLeave={() => hideDropdown('explore')}
             >
@@ -305,9 +267,9 @@ const HeaderNav = () => {
                 <Link
                   href="/BlogAdmin"
                   onClick={handleClick}
-                  className="block text-[var(--main-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200 font-medium"
+                  className="block text-[var(--main-color)] py-2 px-8 text-base hover:bg-[var(--main-color)] hover:text-white transition-colors duration-200 font-medium relative before:content-['🔐'] before:mr-2"
                 >
-                  🔐 Blog Admin
+                  Blog Admin
                 </Link>
               )}
             </div>
