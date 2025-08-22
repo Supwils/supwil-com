@@ -118,7 +118,7 @@ const HeaderNav = () => {
         {/* Desktop Navbar Links */}
         <nav className="flex items-center gap-6 max-md:hidden">
 
-          <Lik
+          <Link
             href="/"
             className="text-lg md:text-xl font-semibold text-[var(--main-color)] px-4 py-2 rounded-xl hover:bg-[var(--main-color)] hover:text-white transition-all duration-300 hover:scale-105"
           >
