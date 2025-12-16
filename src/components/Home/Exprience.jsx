@@ -103,7 +103,7 @@ export default function ExprienceCard() {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
         >
-            <section id="experience" className="flex flex-col justify-center items-center text-center w-[70%] max-w-7xl bg-[var(--background)] rounded-3xl px-[4%] py-[6rem] max-lg:py-[4rem] max-md:py-[3rem] relative max-lg:w-[95%] max-md:px-[5%] backdrop-blur-sm bg-opacity-95 border border-[var(--border-color)] shadow-sm">
+            <section id="experience" className="container flex flex-col justify-center items-center text-center bg-[var(--background)] rounded-3xl py-[6rem] max-lg:py-[4rem] max-md:py-[3rem] relative backdrop-blur-sm bg-opacity-95 border border-[var(--border-color)] shadow-sm">
 
                 {/* Animated Title */}
                 <motion.div

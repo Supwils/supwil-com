@@ -65,7 +65,7 @@ export default function ExprienceItem({ company, role, time, description, imageU
                         transition={{ duration: 0.3 }}
                         className="relative"
                     >
-                        <div className="w-16 h-16 max-lg:w-14 max-lg:h-14 max-md:w-12 max-md:h-12 rounded-full overflow-hidden border-2 border-[var(--main-color)] shadow-lg">
+                        <div className="w-16 h-16 max-lg:w-14 max-lg:h-14 max-md:w-12 max-md:h-12 overflow-hidden shadow-lg rounded-lg">
                             <Image
                                 src={imageUrl}
                                 alt={company}
@@ -74,11 +74,6 @@ export default function ExprienceItem({ company, role, time, description, imageU
                                 className="w-full h-full object-cover"
                             />
                         </div>
-                        <motion.div
-                            className="absolute -inset-1 bg-[var(--main-color)] rounded-full opacity-20 blur-sm"
-                            animate={isHovered ? { scale: 1.2, opacity: 0.3 } : { scale: 1, opacity: 0.2 }}
-                            transition={{ duration: 0.3 }}
-                        />
                     </motion.div>
 
                     <div className="flex-1 min-w-0">

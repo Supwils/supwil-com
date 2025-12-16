@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
@@ -18,7 +17,6 @@ const HeaderNav = () => {
     explore: false
   });
   const dropdownTimers = useRef({ me: null, explore: null });
-  const { theme } = useTheme();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -54,14 +52,6 @@ const HeaderNav = () => {
       setDropdownStates(prev => ({ ...prev, [dropdown]: false }));
     }, 80);
   };
-
-  // Listen for theme changes and show notification
-  useEffect(() => {
-    if (theme) {
-      const themeName = theme === 'dark' ? 'Dark' : 'Light';
-      showNotification(`Switched to ${themeName} mode`, 'success');
-    }
-  }, [theme]);
 
   // Handle scroll for show/hide functionality
   useEffect(() => {
@@ -102,7 +92,7 @@ const HeaderNav = () => {
         </div>
       )}
 
-      <header className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-[70%] px-8 py-4 bg-[var(--background)] flex justify-between items-center z-[100] border border-[var(--border-color)] rounded-3xl backdrop-blur-md bg-opacity-80 shadow-lg transition-all duration-300 max-md:w-[95%] max-md:px-4 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
+      <header className={`fixed top-0 left-1/2 transform -translate-x-1/2 container px-8 py-4 bg-[var(--background)] flex justify-between items-center z-[100] border border-[var(--border-color)] rounded-3xl backdrop-blur-md bg-opacity-80 shadow-lg transition-all duration-300 max-md:w-[95%] max-md:px-4 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
         <Link href="/" className="text-xl md:text-2xl lg:text-3xl text-[var(--text-color)] font-bold hover:text-[var(--main-color)] transition-all duration-300 hover:scale-105">
           Swil.
         </Link>
@@ -295,6 +285,5 @@ const HeaderNav = () => {
 };
 
 export default HeaderNav;
-
 
 

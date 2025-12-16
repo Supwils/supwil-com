@@ -2,10 +2,10 @@ import { Icon } from '@iconify/react';
 
 export default function AboutMeCard() {
     return (
-        <div className='relative flex justify-center items-center px-[3%] pb-0'>
+        <div className='relative flex justify-center items-center px-[3%] pb-20'>
             <section
                 id="about"
-                className="flex flex-col justify-center items-start text-left w-[70%] bg-[var(--background)] rounded-2xl px-[3%] py-[5rem] relative z-10 max-lg:w-[90%] max-md:px-[4%] max-md:py-12 max-md:mt-12"
+                className="container flex flex-col justify-center items-start text-left bg-[var(--background)] rounded-2xl relative z-10 max-md:py-16 max-md:mt-12 pb-10"
             >
                 {/* About Me Text Section */}
                 <div className='w-full mb-12'>
@@ -142,7 +142,7 @@ export default function AboutMeCard() {
                                         icon="skill-icons:aws-light"
                                         className="w-5 h-5 md:w-6 md:h-6"
                                     />
-                                    <span>AWS(EC2,S3,Lambda, RDS, 53) +</span>
+                                    <span>AWS(EC2, S3, Lambda,ECS, Amplify, RDS, 53) +</span>
                                     <Icon
                                         icon="skill-icons:azure-dark"
                                         className="w-5 h-5 md:w-6 md:h-6"
@@ -171,7 +171,7 @@ export default function AboutMeCard() {
                             </li>
                             <li className='text-[var(--text-color)]'>
                                 <div className='inline-flex items-center flex-wrap gap-2 pl-3 font-medium'>
-                                    <span>Comfortable pair with ChatGPT + Cursor + Google for problem solving</span>
+                                    <span>Powered with AI ChatGPT, Gemini, Claude + Cursor, Trae</span>
                                 </div>
                             </li>
                         </ul>
