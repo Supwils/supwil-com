@@ -123,7 +123,7 @@ export default function ContactCard() {
         <div className='relative flex justify-center items-center px-[3%] pb-0'>
             <section
                 id="contact"
-                className="flex flex-col justify-center items-start text-left w-[70%] bg-[var(--background)] rounded-2xl px-[3%] py-[8rem] relative z-10 max-lg:w-[90%] max-md:px-[4%] max-md:py-12 max-md:mt-12"
+                className="container flex flex-col justify-center items-start text-left bg-[var(--background)] rounded-2xl py-[8rem] relative z-10 max-md:py-12 max-md:mt-12"
             >
                 {/* Contact Title */}
                 <div className='w-full mb-12'>

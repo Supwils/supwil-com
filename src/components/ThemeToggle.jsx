@@ -24,7 +24,11 @@ export function ThemeToggle() {
   const isDark = theme === "dark";
 
   const toggleTheme = () => {
-    setTheme(isDark ? "light" : "dark");
+    const nextTheme = isDark ? "light" : "dark";
+    setTheme(nextTheme);
+    if (typeof window !== "undefined") {
+      window.sessionStorage.setItem("theme", nextTheme);
+    }
   };
 
   return (

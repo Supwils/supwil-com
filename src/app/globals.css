@@ -1,5 +1,64 @@
 @import "tailwindcss";
 
+@layer utilities {
+  .container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Mobile: Full width with padding */
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  /* Tablet: Slightly constrained */
+  @media (min-width: 768px) {
+    .container {
+      width: 92%;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  /* Laptop: More constrained for readability */
+  @media (min-width: 1024px) {
+    .container {
+      width: 88%;
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+
+  /* Desktop: Balanced width */
+  @media (min-width: 1280px) {
+    .container {
+      width: 82%;
+      max-width: 1440px;
+    }
+  }
+
+  /* Large Desktop: Cap at max-width for ultra-wide screens */
+  @media (min-width: 1536px) {
+    .container {
+      width: 75%;
+      max-width: 1600px;
+    }
+  }
+
+  /* Ultra-wide screens: Prevent content from being too wide */
+  @media (min-width: 1920px) {
+    .container {
+      width: 70%;
+      max-width: 1800px;
+    }
+  }
+}
 
 :root {
   /* Essential Colors - Light Theme */

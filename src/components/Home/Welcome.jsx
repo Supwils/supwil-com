@@ -21,8 +21,8 @@ export default function WelcomeCard() {
     }, []);
 
     return (
-        <div className="relative flex justify-center items-center px-[3%] pb-0 min-h-[70vh]">
-            <section className="flex justify-center items-center text-left w-[70%] bg-[var(--background)] rounded-2xl px-[3%] py-[10rem] mt-2 relative z-10 max-lg:w-[90%] max-md:flex-col max-md:py-12 max-md:mt-12" id="home">
+        <div className="relative flex justify-center items-center px-[3%] py-8 min-h-[70vh]">
+            <section className="container flex justify-center items-center text-left bg-[var(--background)] rounded-2xl py-[5rem] mt-4 relative z-10 max-md:flex-col max-md:py-8 max-md:mt-12" id="home">
 
                 {/* Content Section */}
                 <div className="flex-1 pr-8 max-md:text-center max-md:mb-8 max-md:pr-0">
