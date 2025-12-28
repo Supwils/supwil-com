@@ -7,31 +7,23 @@ const nextConfig = {
     },
     transpilePackages: ['three'],
 
-    // Faster builds
-    swcMinify: true,
+    turbopack: {},
 
     // Optimize images
     images: {
-        domains: ['localhost'],
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+            },
+            {
+                protocol: 'https',
+                hostname: '**.amazonaws.com',
+            },
+        ],
         unoptimized: process.env.NODE_ENV === 'development',
     },
 
-    // Development optimizations
-    ...(process.env.NODE_ENV === 'development' && {
-        // Faster compilation in development
-        webpack: (config, { dev, isServer }) =>
-        {
-            if (dev && !isServer)
-            {
-                // Optimize for faster rebuilds
-                config.watchOptions = {
-                    poll: 1000,
-                    aggregateTimeout: 300,
-                };
-            }
-            return config;
-        },
-    }),
 };
 
 export default nextConfig;

@@ -6,7 +6,7 @@ const BlogCard = ({ post }) => {
   const router = useRouter();
 
   const handleCardClick = () => {
-    router.push(`/blog/${post._id}`);
+    router.push(`/blog/${post.slug || post._id}`);
   };
 
   const formatDate = (dateString) => {
@@ -25,10 +25,10 @@ const BlogCard = ({ post }) => {
   return (
     <div
       onClick={handleCardClick}
-      className="bg-[var(--background)] rounded-2xl shadow-lg border border-[var(--border-color)] overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl group"
+      className="bg-[var(--background)] rounded-2xl shadow-lg border border-[var(--border-color)] overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl group h-full flex flex-col"
     >
       {/* Card Content */}
-      <div className="p-6">
+      <div className="p-6 flex flex-col flex-grow">
         {/* Title */}
         <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-color)] mb-3 group-hover:text-[var(--main-color)] transition-colors duration-300 leading-tight">
           {post.title}
@@ -59,7 +59,7 @@ const BlogCard = ({ post }) => {
         </p>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-[var(--border-color)]">
+        <div className="flex items-center justify-between pt-4 border-t border-[var(--border-color)] mt-auto">
           {/* Date */}
           <div className="flex items-center text-[var(--text-color)] opacity-60 text-sm">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

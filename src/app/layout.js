@@ -2,11 +2,13 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HeaderNav from "@/components/Header/HeaderNav";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import MusicPlayer from "@/components/MusicPlayer";
+import MusicPlayerold from "@/components/MusicPlayer(old)";
+import MusicPlayer from "@/components/Music/MusicPlayer";
 import Footer from "@/components/Footer/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import FloatingAdminButton from "@/components/Auth/FloatingAdminButton";
 import Chat from "@/components/Home/Chat";
+import QueryProvider from "@/components/Providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,18 +38,20 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          <AuthProvider>
-            <HeaderNav />
-            <main className="pt-20">
-              {children}
-            </main>
-            <MusicPlayer />
-            <Chat />
-            <FloatingAdminButton />
-            <Footer />
-          </AuthProvider>
-  </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <HeaderNav />
+              <main className="pt-20">
+                {children}
+              </main>
+              <MusicPlayer />
+              <Chat />
+              <FloatingAdminButton />
+              <Footer />
+            </AuthProvider>
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

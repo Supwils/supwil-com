@@ -2,54 +2,14 @@
 
 import { motion } from "framer-motion";
 import ExprienceItem from "@/components/UI/ExprienceCard";
+import aboutMeData from "@/data/about-me-data.json";
+
+const experienceData = aboutMeData?.experience ?? {};
 
 export default function ExprienceCard() {
-    const experience = [
-        {
-            company: "Agentiq Capital",
-            role: "Software Engineer",
-            time: "2025",
-            description: "Developed a web application for Agentiq Capital to manage their portfolio and investments.",
-            imageUrl: "/images/agentiq.jpg",
-            order: 1
-        },
-        {
-            company: "Learfield",
-            role: "Software Engineer Intern",
-            time: "Summer 2024",
-            description: "Developed steaming data analytics tool integrated with the company main service to provide real-time data analysis and insights for their clients.",
-            imageUrl: "/images/learfield.jpg",
-            order: 2
-        },
-        {
-            company: "Rice University",
-            role: "Master of Computer Science",
-            time: "2024",
-            description: "Coursework focused on Machine Learning, Web Development, Programming Principles with hands on projects and group works",
-            imageUrl: "/images/riceu.png",
-            order: 3
-        },
-        {
-            company: "Sidearm Sports",
-            role: "Web Developer & Data Imports",
-            time: " Summer 2022 and 2023",
-            description: "Providing web solutions for collegiate clients such as OSU, FSU, for their athletic websites, including build up web components, data imports, validation for smooth project delivery.",
-            imageUrl: "/images/sidearm.png",
-            order: 4
-        },
-        
-        {
-            company: "Syracuse University",
-            role: "Bachelor of Science in Computer Science",
-            time: "2019-2022",
-            description: "General Computer Science study including Data Structures, Programming Languages, Database, Software Engineering",
-            imageUrl: "/images/su.jpg",
-            order: 5
-        }
-    ];
-
-    // Sort experiences by order property
-    const sortedExperience = [...experience].sort((a, b) => a.order - b.order);
+    const title = experienceData.title ?? "Experience";
+    const experienceItems = Array.isArray(experienceData.items) ? experienceData.items : [];
+    const sortedExperience = [...experienceItems].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -115,7 +75,7 @@ export default function ExprienceCard() {
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
                     >
-                        Experience
+                        {title}
                     </motion.h2>
                     <motion.div
                         className="w-24 h-1 bg-gradient-to-r from-[var(--main-color)] to-transparent rounded-full"
@@ -141,7 +101,7 @@ export default function ExprienceCard() {
                             const isLeft = index % 2 === 0;
 
                             return (
-                                <div key={item.order} className="relative flex items-center justify-center">
+                                <div key={item.order ?? `${item.company}-${item.role}-${index}`} className="relative flex items-center justify-center">
 
                                     {/* Timeline Node */}
                                     <motion.div
