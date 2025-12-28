@@ -22,7 +22,7 @@ const AdminDashboard = () =>
         // TODO: Navigate to edit blog page
         console.log('Navigate to edit blog');
         // You can use Next.js router here
-        // router.push('/admin/blog/edit');
+        router.push('/a1d2m3i4n5/edit-blog');
     };
 
     const handleUploadMedia = () =>

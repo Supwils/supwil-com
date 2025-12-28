@@ -56,7 +56,7 @@ const BlogEditor = ({ content, onChange, placeholder = "Write your blog post her
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[400px] p-4',
+                class: 'prose prose-lg mx-auto focus:outline-none min-h-[400px] p-4',
             },
             handleDrop: (view, event, slice, moved) =>
             {

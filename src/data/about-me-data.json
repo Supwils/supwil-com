@@ -1,0 +1,147 @@
+{
+  "welcome": {
+    "greeting": "Hello, It's Me",
+    "name": "Wilson Shang",
+    "typedRoles": ["Software Engineer", "Web Developer", "Athletic Trainer"],
+    "headlinePrefix": "And I'm a",
+    "intro": "Glad to see you here. Welcome to my personal website. Wish you had fun from here. Check out the site to know me more or Ask me for anything!.",
+    "socialLinks": [
+      {
+        "href": "https://www.linkedin.com/in/huahao-shang-7b59b2224/",
+        "iconClassName": "bx bxl-linkedin",
+        "label": "LinkedIn"
+      },
+      {
+        "href": "https://github.com/Supwils/",
+        "iconClassName": "bx bxl-github",
+        "label": "GitHub"
+      },
+      {
+        "href": "https://space.bilibili.com/479803243",
+        "iconClassName": "fa-brands fa-bilibili",
+        "label": "Bilibili"
+      }
+    ],
+    "cv": {
+      "label": "Download CV",
+      "href": "#"
+    },
+    "images": {
+      "front": {
+        "src": "/images/HuahaoSea.png",
+        "alt": "Huahao Shang Front"
+      },
+      "back": {
+        "src": "/images/Huahao.png",
+        "alt": "Huahao Shang Back"
+      }
+    }
+  },
+  "about": {
+    "title": "About Me",
+    "description": "I am Wilson Shang. A full-stack developer. I graduated from Rice University with Master of Computer Science degree.\nI love Coding, Sports, Gaming, Basketball, Cooking..."
+  },
+  "skills": {
+    "title": "My Skills",
+    "categories": [
+      {
+        "title": "Frontend",
+        "rows": [
+          [
+            {
+              "icon": "skill-icons:javascript",
+              "text": "Javascript(ES6+), Proficient for develop +"
+            },
+            { "icon": "skill-icons:html", "text": "HTML5 +" },
+            { "icon": "skill-icons:css", "text": "CSS3" }
+          ],
+          [
+            { "icon": "skill-icons:react-dark", "text": "React +" },
+            { "icon": "logos:nextjs-icon", "text": "Next.js +" },
+            { "icon": "skill-icons:typescript", "text": "TypeScript" }
+          ]
+        ]
+      },
+      {
+        "title": "Backend",
+        "rows": [
+          [
+            { "icon": "skill-icons:nodejs-dark", "text": "Node.js (CRUD proficient)" },
+            { "icon": "devicon:python", "text": "Python (general, Flask, ml/ds, leetcode)" },
+            { "icon": "skill-icons:java-light", "text": "Java" },
+            { "icon": "devicon:cplusplus", "text": "C++ (college oop, algo & graph)" }
+          ],
+          [
+            { "icon": "skill-icons:mysql-light", "text": "MySQL" },
+            { "icon": "skill-icons:postgresql-dark", "text": "PostgreSQL" },
+            {
+              "icon": "skill-icons:mongodb",
+              "text": "MongoDB (Familiar with SQL & NoSQL concepts & develop)"
+            }
+          ]
+        ]
+      },
+      {
+        "title": "Other",
+        "rows": [
+          [{ "text": "Zsh + iTerm2" }],
+          [
+            { "icon": "skill-icons:aws-light", "text": "AWS(EC2, S3, Lambda,ECS, Amplify, RDS, 53) +" },
+            { "icon": "skill-icons:azure-dark", "text": "AzureSQL +" },
+            { "icon": "devicon:googlecloud", "text": "GCP" }
+          ],
+          [
+            { "icon": "icomoon-free:git", "text": "Git +" },
+            { "icon": "skill-icons:docker", "text": "Docker + CI/CD Linux" }
+          ],
+          [{ "text": "Powered with AI ChatGPT, Gemini, Claude + Cursor, Trae" }]
+        ]
+      }
+    ]
+  },
+  "experience": {
+    "title": "Experience",
+    "items": [
+      {
+        "company": "Agentiq Capital",
+        "role": "Software Engineer",
+        "time": "2025",
+        "description": "Developed a web application for Agentiq Capital to manage their portfolio and investments.",
+        "imageUrl": "/images/agentiq.jpg",
+        "order": 1
+      },
+      {
+        "company": "Learfield",
+        "role": "Software Engineer Intern",
+        "time": "Summer 2024",
+        "description": "Developed steaming data analytics tool integrated with the company main service to provide real-time data analysis and insights for their clients.",
+        "imageUrl": "/images/learfield.jpg",
+        "order": 2
+      },
+      {
+        "company": "Rice University",
+        "role": "Master of Computer Science",
+        "time": "2024",
+        "description": "Coursework focused on Machine Learning, Web Development, Programming Principles with hands on projects and group works",
+        "imageUrl": "/images/riceu.png",
+        "order": 3
+      },
+      {
+        "company": "Sidearm Sports",
+        "role": "Web Developer & Data Imports",
+        "time": " Summer 2022 and 2023",
+        "description": "Providing web solutions for collegiate clients such as OSU, FSU, for their athletic websites, including build up web components, data imports, validation for smooth project delivery.",
+        "imageUrl": "/images/sidearm.png",
+        "order": 4
+      },
+      {
+        "company": "Syracuse University",
+        "role": "Bachelor of Science in Computer Science",
+        "time": "2019-2022",
+        "description": "General Computer Science study including Data Structures, Programming Languages, Database, Software Engineering",
+        "imageUrl": "/images/su.jpg",
+        "order": 5
+      }
+    ]
+  }
+}

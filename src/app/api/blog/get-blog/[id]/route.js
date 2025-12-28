@@ -1,15 +1,17 @@
 import dbConnect from '@/lib/mongodb';
 import Post from '@/models/Post';
 import { NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 
-export async function GET(request, { params })
+export async function GET(request, context)
 {
+    const params = await context.params;
     const { id } = params;
 
     if (!id)
     {
         return NextResponse.json(
-            { message: 'Post ID is required' },
+            { message: 'Post ID or Slug is required' },
             { status: 400 }
         );
     }
@@ -18,7 +20,19 @@ export async function GET(request, { params })
     {
         await dbConnect();
 
-        const post = await Post.findById(id);
+        let post;
+
+        // Check if id is a valid ObjectId
+        if (mongoose.Types.ObjectId.isValid(id))
+        {
+            post = await Post.findById(id);
+        }
+
+        // If not found by ID or id is not a valid ObjectId, try finding by slug
+        if (!post)
+        {
+            post = await Post.findOne({ slug: id });
+        }
 
         if (!post)
         {
