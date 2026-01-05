@@ -1,5 +1,33 @@
 import { Icon } from '@iconify/react';
-import aboutMeData from "@/data/about-me-data.json";
+import aboutMeDataRaw from "@/data/about-me-data.json";
+
+interface SkillItem {
+    text: string;
+    icon?: string;
+}
+
+interface SkillCategory {
+    title: string;
+    rows?: SkillItem[][];
+}
+
+interface AboutData {
+    title?: string;
+    description?: string;
+}
+
+interface SkillsData {
+    title?: string;
+    categories?: SkillCategory[];
+}
+
+interface AboutMeData {
+    about?: AboutData;
+    skills?: SkillsData;
+    [key: string]: any;
+}
+
+const aboutMeData = aboutMeDataRaw as AboutMeData;
 
 const aboutData = aboutMeData?.about ?? {};
 const skillsData = aboutMeData?.skills ?? {};

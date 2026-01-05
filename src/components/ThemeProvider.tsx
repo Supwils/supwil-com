@@ -1,9 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { type ThemeProviderProps } from "next-themes";
 
-export function ThemeProvider({ children, ...props }) {
+export interface ThemeProviderCustomProps extends ThemeProviderProps {
+  children: ReactNode;
+}
+
+export function ThemeProvider({ children, ...props }: ThemeProviderCustomProps) {
   const [defaultTheme] = useState(() => {
     if (typeof window === "undefined") return "dark";
 
@@ -30,4 +35,4 @@ export function ThemeProvider({ children, ...props }) {
       {children}
     </NextThemesProvider>
   );
-} 
+}

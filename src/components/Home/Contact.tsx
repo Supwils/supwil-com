@@ -1,10 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import emailjs from "emailjs-com";
 
+interface FormData {
+    fullName: string;
+    email: string;
+    mobileNumber: string;
+    emailSubject: string;
+    message: string;
+    [key: string]: string;
+}
+
+interface FormErrors {
+    fullName: boolean;
+    email: boolean;
+    message: boolean;
+    [key: string]: boolean;
+}
+
 export default function ContactCard() {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         fullName: "",
         email: "",
         mobileNumber: "",
@@ -14,13 +30,13 @@ export default function ContactCard() {
 
     const [validationMessage, setValidationMessage] = useState("");
     const [messageType, setMessageType] = useState(""); // "success" or "error"
-    const [errors, setErrors] = useState({
+    const [errors, setErrors] = useState<FormErrors>({
         fullName: false,
         email: false,
         message: false
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -36,11 +52,11 @@ export default function ContactCard() {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const { fullName, email, message } = formData;
         let hasErrors = false;
-        const newErrors = {
+        const newErrors: FormErrors = {
             fullName: false,
             email: false,
             message: false
@@ -83,7 +99,7 @@ export default function ContactCard() {
             .send(
                 "service_86jznw1",
                 "template_jkvirwl",
-                formData,
+                formData as unknown as Record<string, unknown>, // emailjs types might be loose or strict, safe cast
                 "XT0i9ln5UAkdi5Th3"
             )
             .then(
@@ -181,7 +197,7 @@ export default function ContactCard() {
                         <div className='mb-6'>
                             <textarea
                                 name="message"
-                                rows="6"
+                                rows={6}
                                 placeholder="Your Message*"
                                 value={formData.message}
                                 onChange={handleChange}

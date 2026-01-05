@@ -1,9 +1,9 @@
 "use client"
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { sendChat } from '@/services/chat';
+import { useState, useRef, useEffect, useCallback, FormEvent, KeyboardEvent } from 'react';
+import { sendChat, ChatMessage } from '@/services/chat';
 
 // Fallback responses for when API is unavailable
-const fallbackResponses = {
+const fallbackResponses: Record<string, string> = {
     "hello": "Hi there! How can I help you today?",
     "help": "You can ask me about our services, projects, or anything else you need to know.",
     "services": "We offer web development, design, and consulting services.",
@@ -15,11 +15,11 @@ const fallbackResponses = {
 export default function Chat() {
     const [isOpen, setIsOpen] = useState(false);
     const [isTheaterMode, setIsTheaterMode] = useState(false);
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
-    const [error, setError] = useState(null);
-    const messagesEndRef = useRef(null);
+    const [error, setError] = useState<string | null>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const TypingDots = () => (
         <div className="flex items-center gap-1">
@@ -38,7 +38,7 @@ export default function Chat() {
         </div>
     );
 
-    const TypingBubble = ({ compact = true }) => (
+    const TypingBubble = ({ compact = true }: { compact?: boolean }) => (
         <div 
             className={`max-w-[${compact ? '80%' : '70%'}] ${compact ? 'p-3' : 'p-4'} rounded-2xl bg-[var(--border-color)] text-[var(--text-color)] rounded-bl-none border border-[var(--border-color)] animate-bounce`}
         >
@@ -65,7 +65,7 @@ export default function Chat() {
 
     // Keyboard shortcuts
     useEffect(() => {
-        const handleKeyDown = (e) => {
+        const handleKeyDown = (e: globalThis.KeyboardEvent) => {
             if (e.key === 'Escape' && isTheaterMode) {
                 e.preventDefault();
                 toggleTheaterMode();
@@ -90,7 +90,7 @@ export default function Chat() {
         setMessages([]);
     };
 
-    const getFallbackResponse = (userInput) => {
+    const getFallbackResponse = (userInput: string) => {
         const input = userInput.toLowerCase();
         for (const [key, response] of Object.entries(fallbackResponses)) {
             if (input.includes(key)) {
@@ -100,11 +100,11 @@ export default function Chat() {
         return fallbackResponses.default;
     };
 
-    const handleSendMessage = async (e) => {
+    const handleSendMessage = async (e: FormEvent) => {
         e.preventDefault();
         if (!inputMessage.trim()) return;
 
-        const userMessage = {
+        const userMessage: ChatMessage = {
             id: Date.now(),
             text: inputMessage,
             sender: 'user',
@@ -124,7 +124,7 @@ export default function Chat() {
             // Call server-side API route
             const aiResponse = await sendChat(contextMessages);
 
-            const botMessage = {
+            const botMessage: ChatMessage = {
                 id: Date.now() + 1,
                 text: aiResponse,
                 sender: 'bot',
@@ -132,12 +132,12 @@ export default function Chat() {
             };
             
             setMessages(prev => [...prev, botMessage]);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Chat error:', error);
             setError(error.message);
             
             // Fallback to predefined responses
-            const fallbackMessage = {
+            const fallbackMessage: ChatMessage = {
                 id: Date.now() + 1,
                 text: getFallbackResponse(currentInput),
                 sender: 'bot',
@@ -151,10 +151,19 @@ export default function Chat() {
         }
     };
 
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            handleSendMessage(e);
+            // Create a synthetic event or call logic directly
+            // Since handleSendMessage expects FormEvent, we can just call logic if we separate it, 
+            // but for now let's just cast or mock the event.
+            // Easier: extract logic or just call it.
+            // Let's manually trigger the form submit logic or just copy logic.
+            // Best practice: separate submit logic. But for quick migration:
+            // handleSendMessage(e as unknown as FormEvent);
+            // Actually, handleSendMessage takes FormEvent. We can pass a synthetic one.
+            const form = (e.target as HTMLElement).closest('form');
+            if (form) form.requestSubmit();
         }
     };
 
@@ -232,16 +241,19 @@ export default function Chat() {
                                 </div>
                             )}
                             
-                            {messages.map((message) => (
-                                <div key={message.id} className={`message ${message.sender} ${message.isError ? 'error' : ''}`}>
-                                    <div className="message-content">
-                                        {message.isError && <span className="error-indicator">⚠️ </span>}
-                                        <p>{message.text}</p>
-                                        <span className="timestamp">{message.timestamp}</span>
-                                        {message.isError && <span className="fallback-note">(Fallback response)</span>}
+                            {messages.map((message, index) => {
+                                const key = message.id !== undefined ? String(message.id) : `msg-${index}`;
+                                return (
+                                    <div key={key} className={`message ${message.sender} ${message.isError ? 'error' : ''}`}>
+                                        <div className="message-content">
+                                            {message.isError && <span className="error-indicator">⚠️ </span>}
+                                            <p>{message.text}</p>
+                                            <span className="timestamp">{message.timestamp}</span>
+                                            {message.isError && <span className="fallback-note">(Fallback response)</span>}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                             
                             {isTyping && (
                                 <div className="message bot typing">
@@ -442,6 +454,7 @@ export default function Chat() {
                      display: flex;
                      flex-direction: column;
                      gap: 16px;
+                     margin-top: auto;
                  }
                  
                  .quick-actions {

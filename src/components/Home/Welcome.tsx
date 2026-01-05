@@ -4,14 +4,49 @@ import { useEffect } from "react";
 import Typed from "typed.js";
 import Image from "next/image";
 import styles from "./Welcome.module.css";
-import aboutMeData from "@/data/about-me-data.json";
+import aboutMeDataRaw from "@/data/about-me-data.json";
+
+interface ImageInfo {
+    src: string;
+    alt: string;
+}
+
+interface SocialLink {
+    href: string;
+    label: string;
+    iconClassName: string;
+}
+
+interface WelcomeData {
+    greeting?: string;
+    name?: string;
+    headlinePrefix?: string;
+    intro?: string;
+    cv?: {
+        label?: string;
+        href?: string;
+    };
+    images?: {
+        front?: ImageInfo;
+        back?: ImageInfo;
+    };
+    typedRoles?: string[];
+    socialLinks?: SocialLink[];
+}
+
+interface AboutMeData {
+    welcome?: WelcomeData;
+    [key: string]: any;
+}
+
+const aboutMeData = aboutMeDataRaw as AboutMeData;
 
 const welcomeData = aboutMeData?.welcome ?? {};
-const defaultFrontImage = {
+const defaultFrontImage: ImageInfo = {
     src: "/images/HuahaoSea.png",
     alt: "Profile Image Front"
 };
-const defaultBackImage = {
+const defaultBackImage: ImageInfo = {
     src: "/images/Huahao.png",
     alt: "Profile Image Back"
 };
@@ -38,8 +73,8 @@ export default function WelcomeCard() {
     const name = welcomeData.name ?? "";
     const headlinePrefix = welcomeData.headlinePrefix ?? "And I'm a";
     const intro = welcomeData.intro ?? "";
-    const cvLabel = welcomeData.cv?.label ?? "Download CV";
-    const cvHref = welcomeData.cv?.href ?? "#";
+    // const cvLabel = welcomeData.cv?.label ?? "Download CV";
+    // const cvHref = welcomeData.cv?.href ?? "#";
     const frontImage = welcomeData.images?.front ?? defaultFrontImage;
     const backImage = welcomeData.images?.back ?? defaultBackImage;
 

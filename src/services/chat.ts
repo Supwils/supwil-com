@@ -1,7 +1,9 @@
 export type ChatMessage = {
+  id?: number | string;
   sender: string;
   text: string;
   timestamp?: string | number;
+  isError?: boolean;
   [key: string]: unknown;
 };
 

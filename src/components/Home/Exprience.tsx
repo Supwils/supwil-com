@@ -1,8 +1,31 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
+// @ts-ignore - Ignoring missing type definition for UI component
 import ExprienceItem from "@/components/UI/ExprienceCard";
-import aboutMeData from "@/data/about-me-data.json";
+import aboutMeDataRaw from "@/data/about-me-data.json";
+
+interface ExperienceItemData {
+    company: string;
+    role: string;
+    time: string;
+    description: string;
+    imageUrl: string;
+    order?: number;
+    [key: string]: any;
+}
+
+interface ExperienceData {
+    title?: string;
+    items?: ExperienceItemData[];
+}
+
+interface AboutMeData {
+    experience?: ExperienceData;
+    [key: string]: any;
+}
+
+const aboutMeData = aboutMeDataRaw as AboutMeData;
 
 const experienceData = aboutMeData?.experience ?? {};
 
@@ -11,7 +34,7 @@ export default function ExprienceCard() {
     const experienceItems = Array.isArray(experienceData.items) ? experienceData.items : [];
     const sortedExperience = [...experienceItems].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-    const containerVariants = {
+    const containerVariants: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -22,7 +45,7 @@ export default function ExprienceCard() {
         }
     };
 
-    const titleVariants = {
+    const titleVariants: Variants = {
         hidden: {
             opacity: 0,
             y: -50,
@@ -39,7 +62,7 @@ export default function ExprienceCard() {
         }
     };
 
-    const timelineVariants = {
+    const timelineVariants: Variants = {
         hidden: {
             scaleY: 0,
             opacity: 0
@@ -90,9 +113,8 @@ export default function ExprienceCard() {
                     {/* Central Timeline Line */}
                     <motion.div
                         className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-[var(--main-color)] via-[var(--main-color)] to-transparent rounded-full max-md:hidden"
-                        style={{ height: `${sortedExperience.length * 300}px` }}
+                        style={{ height: `${sortedExperience.length * 300}px`, transformOrigin: "top" }}
                         variants={timelineVariants}
-                        transformOrigin="top"
                     />
 
                     {/* Experience Items */}
@@ -145,7 +167,7 @@ export default function ExprienceCard() {
                                             delay: index * 0.2 + 1,
                                             ease: "easeOut"
                                         }}
-                                        transformOrigin={isLeft ? "right" : "left"}
+                                        style={{ transformOrigin: isLeft ? "right" : "left" }}
                                     />
                                 </div>
                             );

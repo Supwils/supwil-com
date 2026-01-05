@@ -1,62 +1,69 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 
-const AuthContext = createContext();
+export interface User {
+    username: string;
+    role: string;
+    userId?: string;
+}
 
-export const useAuth = () =>
-{
+interface AuthContextType {
+    user: User | null;
+    isAuthenticated: boolean;
+    isLoading: boolean;
+    login: (username: string, password: string) => Promise<{ success: boolean; message: string }>;
+    logout: () => Promise<void>;
+    checkAuth: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
-    if (!context)
-    {
+    if (!context) {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
 };
 
-export const AuthProvider = ({ children }) =>
-{
-    const [user, setUser] = useState(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+interface AuthProviderProps {
+    children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+    const [user, setUser] = useState<User | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     // Check authentication status on mount
-    useEffect(() =>
-    {
+    useEffect(() => {
         checkAuth();
     }, []);
 
-    const checkAuth = async () =>
-    {
-        try
-        {
+    const checkAuth = async (): Promise<void> => {
+        try {
             const response = await fetch('/api/auth/check');
             const data = await response.json();
 
-            if (data.isAuthenticated)
-            {
+            if (data.isAuthenticated) {
                 setUser(data.user);
                 setIsAuthenticated(true);
-            } else
-            {
+            } else {
                 setUser(null);
                 setIsAuthenticated(false);
             }
-        } catch (error)
-        {
+        } catch (error) {
             console.error('Auth check failed:', error);
             setUser(null);
             setIsAuthenticated(false);
-        } finally
-        {
+        } finally {
             setIsLoading(false);
         }
     };
 
-    const login = async (username, password) =>
-    {
-        try
-        {
+    const login = async (username: string, password: string): Promise<{ success: boolean; message: string }> => {
+        try {
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
@@ -67,34 +74,28 @@ export const AuthProvider = ({ children }) =>
 
             const data = await response.json();
 
-            if (data.success)
-            {
+            if (data.success) {
                 setUser(data.user);
                 setIsAuthenticated(true);
                 return { success: true, message: data.message };
-            } else
-            {
+            } else {
                 return { success: false, message: data.message };
             }
-        } catch (error)
-        {
+        } catch (error) {
             console.error('Login failed:', error);
             return { success: false, message: 'Login failed. Please try again.' };
         }
     };
 
-    const logout = async () =>
-    {
-        try
-        {
+    const logout = async (): Promise<void> => {
+        try {
             await fetch('/api/auth/logout', {
                 method: 'POST',
             });
 
             setUser(null);
             setIsAuthenticated(false);
-        } catch (error)
-        {
+        } catch (error) {
             console.error('Logout failed:', error);
             // Still clear local state even if API call fails
             setUser(null);
@@ -102,7 +103,7 @@ export const AuthProvider = ({ children }) =>
         }
     };
 
-    const value = {
+    const value: AuthContextType = {
         user,
         isAuthenticated,
         isLoading,
@@ -116,4 +117,4 @@ export const AuthProvider = ({ children }) =>
             {children}
         </AuthContext.Provider>
     );
-}; 
+};
