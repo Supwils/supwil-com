@@ -41,7 +41,6 @@
     "react-dom": "^19.0.0",
     "react-i18next": "^15.5.3",
     "react-markdown": "^10.1.0",
-    "react-query": "link:heroicons/react@tanstack/react-query",
     "react-youtube": "^10.1.0",
     "three": "^0.177.0",
     "typed.js": "^2.1.0"
