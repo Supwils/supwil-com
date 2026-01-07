@@ -4,12 +4,10 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 
-const AdminDashboard = () =>
-{
+const AdminDashboard: React.FC = () => {
     const { user, logout } = useAuth();
     const router = useRouter();
-    const handleCreateBlog = () =>
-    {
+    const handleCreateBlog = (): void => {
         // TODO: Navigate to create blog page
         console.log('Navigate to create blog');
         // You can use Next.js router here
@@ -17,23 +15,20 @@ const AdminDashboard = () =>
         router.push('/a1d2m3i4n5/create-blog');
     };
 
-    const handleEditBlog = () =>
-    {
+    const handleEditBlog = (): void => {
         // TODO: Navigate to edit blog page
         console.log('Navigate to edit blog');
         // You can use Next.js router here
         router.push('/a1d2m3i4n5/edit-blog');
     };
 
-    const handleUploadMedia = () =>
-    {
+    const handleUploadMedia = (): void => {
         // Navigate to S3 upload page
         console.log('Navigate to S3 upload');
         router.push('/a1d2m3i4n5/upload-media');
     };
 
-    const handleLogout = async () =>
-    {
+    const handleLogout = async (): Promise<void> => {
         await logout();
     };
 
@@ -182,4 +177,4 @@ const AdminDashboard = () =>
     );
 };
 
-export default AdminDashboard; 
+export default AdminDashboard;

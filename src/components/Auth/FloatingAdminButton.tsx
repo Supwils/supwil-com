@@ -3,24 +3,20 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
-const FloatingAdminButton = () =>
-{
+const FloatingAdminButton: React.FC = () => {
     const { isAuthenticated, logout } = useAuth();
-    const [isHovered, setIsHovered] = useState(false);
+    const [isHovered, setIsHovered] = useState<boolean>(false);
 
-    if (!isAuthenticated)
-    {
+    if (!isAuthenticated) {
         return null; // Don't show if not authenticated
     }
 
-    const handleLogout = async () =>
-    {
+    const handleLogout = async (): Promise<void> => {
         await logout();
         setIsHovered(false);
     };
 
-    const handleAdminPage = () =>
-    {
+    const handleAdminPage = (): void => {
         window.location.href = '/a1d2m3i4n5';
         setIsHovered(false);
     };
@@ -103,4 +99,4 @@ const FloatingAdminButton = () =>
     );
 };
 
-export default FloatingAdminButton; 
+export default FloatingAdminButton;

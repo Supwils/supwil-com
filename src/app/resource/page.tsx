@@ -1,8 +1,8 @@
+import React from 'react';
 import { resourceCategories } from '@/data/resource-data';
 import CategorySection from '@/components/UI/CategorySection';
 
-export default function Resources()
-{
+const Resources: React.FC = () => {
     return (
         <div className="min-h-screen bg-[var(--background)] py-20 w-[70%] mx-auto">
             <div className="max-w-none px-6">
@@ -73,3 +73,5 @@ export default function Resources()
         </div>
     )
 }
+
+export default Resources;

@@ -1,21 +1,28 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
-const LoginForm = ({ onSuccess }) =>
-{
-    const [formData, setFormData] = useState({
+interface LoginFormProps {
+    onSuccess?: () => void;
+}
+
+interface FormData {
+    username: string;
+    password: string;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
+    const [formData, setFormData] = useState<FormData>({
         username: '',
         password: ''
     });
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string>('');
 
     const { login } = useAuth();
 
-    const handleChange = (e) =>
-    {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
@@ -25,28 +32,22 @@ const LoginForm = ({ onSuccess }) =>
         if (error) setError('');
     };
 
-    const handleSubmit = async (e) =>
-    {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
 
-        try
-        {
+        try {
             const result = await login(formData.username, formData.password);
 
-            if (result.success)
-            {
+            if (result.success) {
                 if (onSuccess) onSuccess();
-            } else
-            {
+            } else {
                 setError(result.message);
             }
-        } catch (error)
-        {
+        } catch (error) {
             setError('Login failed. Please try again.');
-        } finally
-        {
+        } finally {
             setIsLoading(false);
         }
     };
@@ -197,4 +198,4 @@ const LoginForm = ({ onSuccess }) =>
     );
 };
 
-export default LoginForm; 
+export default LoginForm;

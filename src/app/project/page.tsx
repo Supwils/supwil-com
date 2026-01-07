@@ -1,7 +1,6 @@
+import React from 'react';
 
-
-export default function Projects()
-{
+const Projects: React.FC = () => {
     return (
         <div className="min-h-screen bg-[var(--background)] py-20 w-[70%] mx-auto">
             <div className="max-w-none mx-auto px-6">
@@ -53,3 +52,5 @@ export default function Projects()
         </div>
     );
 }
+
+export default Projects;
