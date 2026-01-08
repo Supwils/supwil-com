@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import GlitchText from '@/components/UI/GlitchText.jsx';
+
 const NotFound = () =>
 {
 
@@ -95,4 +94,5 @@ const NotFound = () =>
     );
 };
 
-export default NotFound; 
+export default NotFound;
+

@@ -1,8 +1,9 @@
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import HeaderNav from "@/components/Header/HeaderNav";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import MusicPlayerold from "@/components/MusicPlayer(old)";
+import { ThemeProvider } from "@/components/Theme/ThemeProvider";
 import MusicPlayer from "@/components/Music/MusicPlayer";
 import Footer from "@/components/Footer/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -20,31 +21,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Supwils",
-  description: "Personal website of Huahao(Wilson) Shang - It's not only a developer showcase but more of a digital garden for my thoughts and ideas",
+  description:
+    "Personal website of Huahao(Wilson) Shang - It's not only a developer showcase but more of a digital garden for my thoughts and ideas",
   icons: {
-    icon: '/logo.svg',
+    icon: "/logo.svg",
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet' />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <link
+          href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+          rel="stylesheet"
+        />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <QueryProvider>
           <ThemeProvider>
             <AuthProvider>
               <HeaderNav />
-              <main className="pt-20">
-                {children}
-              </main>
+              <main className="pt-20">{children}</main>
               <MusicPlayer />
               <Chat />
               <FloatingAdminButton />
@@ -56,3 +60,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+

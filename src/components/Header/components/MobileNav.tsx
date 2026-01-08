@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { ThemeToggle } from "@/components/Theme/ThemeToggle";
 import { MouseEvent } from "react";
 
 interface MobileNavProps {

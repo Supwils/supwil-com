@@ -23,12 +23,14 @@ export default function EditBlogPage() {
             if (!isAuthenticated) return;
             
             try {
-                const response = await fetch('/api/blog/get-blogs');
+                // Use all=true to get all posts including drafts for admin
+                const response = await fetch('/api/blog/get-blogs?all=true&limit=100');
                 if (!response.ok) {
                     throw new Error('Failed to fetch blogs');
                 }
                 const data = await response.json();
-                setBlogs(data);
+                // Handle new paginated response format
+                setBlogs(data.items || data);
             } catch (err) {
                 console.error('Error fetching blogs:', err);
                 setError(err.message);
@@ -138,31 +140,50 @@ export default function EditBlogPage() {
                         </div>
                     ) : (
                         <div className="grid gap-4">
-                            {blogs.map((blog) => (
+                                            {blogs.map((blog) => (
                                 <div 
                                     key={blog._id} 
                                     className="bg-[var(--background)] border border-[var(--border-color)] rounded-xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[var(--main-color)] transition-colors"
                                 >
                                     <div className="flex-1">
-                                        <h2 className="text-xl font-semibold text-[var(--text-color)] mb-2">
-                                            {blog.title}
-                                        </h2>
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <h2 className="text-xl font-semibold text-[var(--text-color)]">
+                                                {blog.title}
+                                            </h2>
+                                            {/* Category badge */}
+                                            {blog.category && (
+                                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium uppercase ${
+                                                    blog.category === 'tech' 
+                                                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' 
+                                                        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                                }`}>
+                                                    {blog.category}
+                                                </span>
+                                            )}
+                                            {/* Status badge */}
+                                            {blog.status === 'draft' && (
+                                                <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+                                                    Draft
+                                                </span>
+                                            )}
+                                        </div>
                                         <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-color)] opacity-60">
                                             <span className="flex items-center">
                                                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                 </svg>
-                                                {new Date(blog.createdAt).toLocaleDateString()}
+                                                {new Date(blog.publishedAt || blog.createdAt).toLocaleDateString()}
                                             </span>
-                                            {blog.tags && blog.tags.length > 0 && (
+                                            {/* Display badges (fallback to tags) */}
+                                            {((blog.badges && blog.badges.length > 0) || (blog.tags && blog.tags.length > 0)) && (
                                                 <div className="flex gap-2">
-                                                    {blog.tags.slice(0, 3).map((tag, idx) => (
+                                                    {(blog.badges || blog.tags).slice(0, 3).map((badge, idx) => (
                                                         <span key={idx} className="bg-[var(--main-color)] bg-opacity-10 px-2 py-0.5 rounded-full text-xs text-[var(--main-color)]">
-                                                            {tag}
+                                                            {badge}
                                                         </span>
                                                     ))}
-                                                    {blog.tags.length > 3 && (
-                                                        <span className="text-xs opacity-60">+{blog.tags.length - 3}</span>
+                                                    {(blog.badges || blog.tags).length > 3 && (
+                                                        <span className="text-xs opacity-60">+{(blog.badges || blog.tags).length - 3}</span>
                                                     )}
                                                 </div>
                                             )}

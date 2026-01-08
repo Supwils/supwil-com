@@ -1,15 +1,35 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import React from "react";
+import { getBadgeDisplayName, getCategoryDisplayName } from "@/data/badge-data";
 
-const BlogCard = ({ post }) => {
+interface BlogPost {
+  _id: string;
+  slug?: string;
+  title: string;
+  description: string;
+  tags?: string[];
+  badges?: string[];
+  category?: string;
+  publishedAt?: string;
+  createdAt: string;
+  readingTimeMinutes?: number;
+  status?: string;
+}
+
+interface BlogCardProps {
+  post: BlogPost;
+}
+
+const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   const router = useRouter();
 
   const handleCardClick = () => {
     router.push(`/blog/${post.slug || post._id}`);
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -17,10 +37,18 @@ const BlogCard = ({ post }) => {
     });
   };
 
-  const truncateText = (text, maxLength = 150) => {
+  const truncateText = (text: string, maxLength: number = 150): string => {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength).trim() + '...';
   };
+
+  // Get display badges (prefer badges, fallback to tags for legacy)
+  const displayBadges = post.badges && post.badges.length > 0 
+    ? post.badges 
+    : post.tags || [];
+
+  // Get display date (prefer publishedAt, fallback to createdAt)
+  const displayDate = post.publishedAt || post.createdAt;
 
   return (
     <div
@@ -29,32 +57,53 @@ const BlogCard = ({ post }) => {
     >
       {/* Card Content */}
       <div className="p-6 flex flex-col flex-grow">
+        {/* Category & Reading Time */}
+        <div className="flex items-center justify-between mb-3">
+          {post.category && (
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${
+              post.category === 'tech' 
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' 
+                : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+            }`}>
+              {getCategoryDisplayName(post.category)}
+            </span>
+          )}
+          {post.readingTimeMinutes && (
+            <span className="text-xs text-[var(--text-color)] opacity-50 flex items-center">
+              <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {post.readingTimeMinutes} min read
+            </span>
+          )}
+        </div>
+
         {/* Title */}
         <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-color)] mb-3 group-hover:text-[var(--main-color)] transition-colors duration-300 leading-tight">
           {post.title}
         </h2>
 
-        {/* Tags */}
-        {post.tags && post.tags.length > 0 && (
+        {/* Badges */}
+        {displayBadges.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
-            {post.tags.slice(0, 3).map((tag, index) => (
+            {displayBadges.slice(0, 4).map((badge, index) => (
               <span
                 key={index}
-                className="px-2 py-1 bg-[var(--main-color)] bg-opacity-20 text-[var(--background)] rounded-full text-lg font-bold"
+                className="px-2 py-1 bg-[var(--main-color)]/15 text-[var(--main-color)] rounded-full text-sm font-medium"
               >
-                {tag}
+                {getBadgeDisplayName(badge)}
               </span>
             ))}
-            {post.tags.length > 3 && (
+            {displayBadges.length > 4 && (
               <span className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-[var(--text-color)] rounded-full text-xs font-medium">
-                +{post.tags.length - 3} more
+                +{displayBadges.length - 4} more
               </span>
             )}
           </div>
         )}
 
         {/* Description */}
-        <p className="text-[var(--text-color)] text-xl opacity-70 mb-4 leading-relaxed font-medium">
+        <p className="text-[var(--text-color)] text-lg opacity-70 mb-4 leading-relaxed flex-grow">
           {truncateText(post.description)}
         </p>
 
@@ -65,7 +114,7 @@ const BlogCard = ({ post }) => {
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            {formatDate(post.createdAt)}
+            {formatDate(displayDate)}
           </div>
 
           {/* Read More Arrow */}
@@ -81,4 +130,4 @@ const BlogCard = ({ post }) => {
   );
 };
 
-export default BlogCard; 
+export default BlogCard;

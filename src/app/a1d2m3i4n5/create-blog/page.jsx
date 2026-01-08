@@ -3,18 +3,24 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import BlogEditor from '@/components/Blog/BlogEditor';
+import { getTechBadges, getLifeBadges, getBadgeDisplayName } from '@/data/badge-data';
 
 export default function CreateBlog()
 {
     const { isAuthenticated } = useAuth();
     const [editorMode, setEditorMode] = useState('rich'); // 'simple' or 'rich'
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [customBadgeInput, setCustomBadgeInput] = useState('');
 
     const [newBlog, setNewBlog] = useState({
         title: '',
         description: '',
         content: '',
-        tags: ''
+        tags: '',
+        category: 'tech',
+        badges: [],
+        publishedAt: '',
+        status: 'published'
     });
 
     const handleInputChange = (e) =>
@@ -40,6 +46,62 @@ export default function CreateBlog()
             ...prev,
             tags: e.target.value
         }));
+    };
+
+    // Toggle a preset badge
+    const toggleBadge = (badgeKey) =>
+    {
+        setNewBlog(prev => {
+            const currentBadges = prev.badges || [];
+            if (currentBadges.includes(badgeKey)) {
+                return { ...prev, badges: currentBadges.filter(b => b !== badgeKey) };
+            } else {
+                if (currentBadges.length >= 12) {
+                    alert('Maximum 12 badges allowed');
+                    return prev;
+                }
+                return { ...prev, badges: [...currentBadges, badgeKey] };
+            }
+        });
+    };
+
+    // Add custom badge
+    const addCustomBadge = (e) =>
+    {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            const badge = customBadgeInput.toLowerCase().trim();
+            if (badge && badge.length <= 24 && !newBlog.badges.includes(badge)) {
+                if (newBlog.badges.length >= 12) {
+                    alert('Maximum 12 badges allowed');
+                    return;
+                }
+                setNewBlog(prev => ({
+                    ...prev,
+                    badges: [...prev.badges, badge]
+                }));
+                setCustomBadgeInput('');
+            }
+        }
+    };
+
+    // Remove a badge
+    const removeBadge = (badgeKey) =>
+    {
+        setNewBlog(prev => ({
+            ...prev,
+            badges: prev.badges.filter(b => b !== badgeKey)
+        }));
+    };
+
+    // Get preset badges based on category
+    const getPresetBadges = () =>
+    {
+        if (newBlog.category === 'tech') {
+            return getTechBadges();
+        } else {
+            return getLifeBadges();
+        }
     };
 
     const validateForm = () =>
@@ -175,10 +237,14 @@ export default function CreateBlog()
                 .filter(tag => tag.length > 0);
 
             const blogData = {
-                ...newBlog,
+                title: newBlog.title,
+                description: newBlog.description,
                 content: processedContent, // Use processed content with S3 URLs
                 tags: processedTags,
-                createdAt: new Date().toISOString(),
+                badges: newBlog.badges,
+                category: newBlog.category,
+                status: newBlog.status,
+                publishedAt: newBlog.publishedAt || new Date().toISOString(),
                 author: 'supwils'
             };
 
@@ -207,8 +273,13 @@ export default function CreateBlog()
                     title: '',
                     description: '',
                     content: '',
-                    tags: ''
+                    tags: '',
+                    category: 'tech',
+                    badges: [],
+                    publishedAt: '',
+                    status: 'published'
                 });
+                setCustomBadgeInput('');
             } else
             {
                 throw new Error(result.error || 'Failed to create blog');
@@ -346,6 +417,171 @@ export default function CreateBlog()
                             "
                             placeholder="Write a brief description of your blog post..."
                         />
+                    </div>
+
+                    {/* Category & Status Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Category Field */}
+                        <div>
+                            <label className="block text-lg font-semibold text-[var(--text-color)] mb-3">
+                                Category
+                            </label>
+                            <div className="flex bg-[var(--background)] border border-[var(--border-color)] rounded-xl p-1">
+                                {['tech', 'life'].map((cat) => (
+                                    <button
+                                        key={cat}
+                                        type="button"
+                                        onClick={() => setNewBlog(prev => ({ ...prev, category: cat, badges: [] }))}
+                                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                            newBlog.category === cat
+                                                ? 'bg-[var(--main-color)] text-white'
+                                                : 'text-[var(--text-color)] hover:bg-[var(--main-color)]/10'
+                                        }`}
+                                    >
+                                        {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Status Field */}
+                        <div>
+                            <label className="block text-lg font-semibold text-[var(--text-color)] mb-3">
+                                Status
+                            </label>
+                            <div className="flex bg-[var(--background)] border border-[var(--border-color)] rounded-xl p-1">
+                                {['published', 'draft'].map((st) => (
+                                    <button
+                                        key={st}
+                                        type="button"
+                                        onClick={() => setNewBlog(prev => ({ ...prev, status: st }))}
+                                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                            newBlog.status === st
+                                                ? st === 'published' 
+                                                    ? 'bg-green-500 text-white' 
+                                                    : 'bg-yellow-500 text-white'
+                                                : 'text-[var(--text-color)] hover:bg-[var(--main-color)]/10'
+                                        }`}
+                                    >
+                                        {st.charAt(0).toUpperCase() + st.slice(1)}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Published At Field */}
+                        <div>
+                            <label
+                                htmlFor="publishedAt"
+                                className="block text-lg font-semibold text-[var(--text-color)] mb-3"
+                            >
+                                Publish Date
+                            </label>
+                            <input
+                                type="datetime-local"
+                                id="publishedAt"
+                                name="publishedAt"
+                                value={newBlog.publishedAt}
+                                onChange={handleInputChange}
+                                className="
+                                    w-full px-4 py-2.5
+                                    bg-[var(--background)] 
+                                    border border-[var(--border-color)] 
+                                    rounded-xl 
+                                    text-[var(--text-color)]
+                                    focus:outline-none 
+                                    focus:border-[var(--main-color)]
+                                    focus:ring-2 
+                                    focus:ring-[var(--main-color)]/20
+                                    transition-all duration-200
+                                "
+                            />
+                            <p className="mt-1 text-xs text-[var(--text-color)] opacity-50">
+                                Leave empty for current time
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Badges Field */}
+                    <div>
+                        <label className="block text-lg font-semibold text-[var(--text-color)] mb-3">
+                            Badges <span className="text-sm font-normal opacity-70">(click to select, max 12)</span>
+                        </label>
+                        
+                        {/* Preset Badges */}
+                        <div className="mb-4">
+                            <p className="text-sm text-[var(--text-color)] opacity-60 mb-2">
+                                Preset badges for {newBlog.category === 'tech' ? 'Tech' : 'Life'}:
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {getPresetBadges().map((badge) => (
+                                    <button
+                                        key={badge.key}
+                                        type="button"
+                                        onClick={() => toggleBadge(badge.key)}
+                                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                                            newBlog.badges.includes(badge.key)
+                                                ? 'bg-[var(--main-color)] text-white'
+                                                : 'bg-[var(--main-color)]/10 text-[var(--main-color)] hover:bg-[var(--main-color)]/20'
+                                        }`}
+                                    >
+                                        {badge.displayName}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Custom Badge Input */}
+                        <div className="mb-4">
+                            <input
+                                type="text"
+                                value={customBadgeInput}
+                                onChange={(e) => setCustomBadgeInput(e.target.value)}
+                                onKeyDown={addCustomBadge}
+                                placeholder="Add custom badge (press Enter or comma)"
+                                className="
+                                    w-full px-4 py-2.5 
+                                    bg-[var(--background)] 
+                                    border border-[var(--border-color)] 
+                                    rounded-xl 
+                                    text-[var(--text-color)]
+                                    placeholder-[var(--text-color)]/50
+                                    focus:outline-none 
+                                    focus:border-[var(--main-color)]
+                                    focus:ring-2 
+                                    focus:ring-[var(--main-color)]/20
+                                    transition-all duration-200
+                                "
+                            />
+                        </div>
+
+                        {/* Selected Badges Display */}
+                        {newBlog.badges.length > 0 && (
+                            <div>
+                                <p className="text-sm text-[var(--text-color)] opacity-60 mb-2">
+                                    Selected badges ({newBlog.badges.length}/12):
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {newBlog.badges.map((badge) => (
+                                        <span
+                                            key={badge}
+                                            className="px-3 py-1.5 bg-[var(--main-color)] text-white rounded-full text-sm font-medium flex items-center gap-2"
+                                        >
+                                            {getBadgeDisplayName(badge)}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeBadge(badge)}
+                                                className="hover:opacity-70 transition-opacity"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Content Field */}

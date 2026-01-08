@@ -95,7 +95,7 @@ const Dropdown = ({
             <Link
               key={index}
               href={item.href || '#'}
-              onClick={item.onClick || ((e) => e.preventDefault())}
+              onClick={item.onClick}
               className={`flex items-center gap-3 text-[var(--text-color)] px-5 py-3 text-sm md:text-base hover:bg-[var(--main-color)] hover:text-white transition-all duration-200 hover:pl-6 ${
                 item.highlight ? 'text-[var(--main-color)] font-medium' : ''
               }`}

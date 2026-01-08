@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, EditorContent, Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import TextAlign from '@tiptap/extension-text-align'
 import Underline from '@tiptap/extension-underline'
@@ -10,7 +10,13 @@ import Image from '@tiptap/extension-image'
 import Code from '@tiptap/extension-code'
 import CodeBlock from '@tiptap/extension-code-block'
 
-const BlogEditor = ({ content, onChange, placeholder = "Write your blog post here..." }) =>
+interface BlogEditorProps {
+    content?: string;
+    onChange?: (html: string) => void;
+    placeholder?: string;
+}
+
+const BlogEditor: React.FC<BlogEditorProps> = ({ content, onChange, placeholder = "Write your blog post here..." }) =>
 {
     const editor = useEditor({
         immediatelyRender: false, // Fix SSR hydration issues
@@ -71,16 +77,18 @@ const BlogEditor = ({ content, onChange, placeholder = "Write your blog post her
                         const reader = new FileReader();
                         reader.onload = (e) =>
                         {
-                            const base64Data = e.target.result;
+                            const base64Data = e.target?.result as string;
 
                             // Use TipTap's setImage command for proper insertion
-                            editor.chain().focus().setImage({
-                                src: base64Data,
-                                alt: 'Image to be uploaded',
-                                'data-pending-upload': 'true',
-                                'data-original-name': file.name,
-                                class: 'max-w-full h-auto rounded-lg pending-upload'
-                            }).run();
+                            if (editor) {
+                                editor.chain().focus().setImage({
+                                    src: base64Data,
+                                    alt: 'Image to be uploaded',
+                                    'data-pending-upload': 'true',
+                                    'data-original-name': file.name,
+                                    class: 'max-w-full h-auto rounded-lg pending-upload'
+                                } as any).run();
+                            }
 
                             console.log('📷 Image dropped and added to editor (will upload when blog is created)');
                         };
@@ -96,6 +104,7 @@ const BlogEditor = ({ content, onChange, placeholder = "Write your blog post her
 
     const setLink = useCallback(() =>
     {
+        if (!editor) return;
         const previousUrl = editor.getAttributes('link').href;
         const url = window.prompt('URL', previousUrl);
 
@@ -115,6 +124,7 @@ const BlogEditor = ({ content, onChange, placeholder = "Write your blog post her
 
     const addImage = useCallback(() =>
     {
+        if (!editor) return;
         // Show options: Upload file or Enter URL
         const choice = window.confirm('Choose how to add an image:\n\n✅ OK = Upload file from device\n❌ Cancel = Enter image URL');
 
@@ -127,7 +137,8 @@ const BlogEditor = ({ content, onChange, placeholder = "Write your blog post her
 
             input.onchange = async (e) =>
             {
-                const file = e.target.files[0];
+                const target = e.target as HTMLInputElement;
+                const file = target.files?.[0];
                 if (!file) return;
 
                 try
@@ -136,7 +147,7 @@ const BlogEditor = ({ content, onChange, placeholder = "Write your blog post her
                     const reader = new FileReader();
                     reader.onload = (e) =>
                     {
-                        const base64Data = e.target.result;
+                        const base64Data = e.target?.result as string;
 
                         // Insert image with base64 data and special attribute to mark for processing
                         editor.chain().focus().setImage({
@@ -145,12 +156,12 @@ const BlogEditor = ({ content, onChange, placeholder = "Write your blog post her
                             'data-pending-upload': 'true',
                             'data-original-name': file.name,
                             class: 'max-w-full h-auto rounded-lg pending-upload'
-                        }).run();
+                        } as any).run();
 
                         console.log('📷 Image added to editor (will upload when blog is created)');
                     };
                     reader.readAsDataURL(file);
-                } catch (error)
+                } catch (error: any)
                 {
                     console.error('File reading error:', error);
                     alert('❌ Failed to read image file: ' + error.message);

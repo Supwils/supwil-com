@@ -3,6 +3,26 @@ import Post from '@/models/Post';
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
+// Helper function to calculate reading time in minutes
+function calculateReadingTime(htmlContent) {
+    // Strip HTML tags to get plain text
+    const plainText = htmlContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    // Average reading speed: 200 words per minute
+    const wordCount = plainText.split(/\s+/).filter(word => word.length > 0).length;
+    const minutes = Math.ceil(wordCount / 200);
+    return Math.max(1, minutes); // Minimum 1 minute
+}
+
+// Helper function to normalize badges
+function normalizeBadges(badges) {
+    if (!badges || !Array.isArray(badges)) return [];
+    return badges
+        .map(badge => String(badge).toLowerCase().trim())
+        .filter(badge => badge.length > 0 && badge.length <= 24)
+        .filter((badge, index, self) => self.indexOf(badge) === index) // Remove duplicates
+        .slice(0, 12); // Max 12 badges
+}
+
 // Function to verify JWT token from cookies
 async function getSession(request)
 {
@@ -160,24 +180,58 @@ export async function POST(request)
             .replace(/-+/g, '-') // Replace multiple hyphens with single
             .trim('-'); // Remove leading/trailing hyphens
 
+        // Calculate reading time from content
+        const readingTimeMinutes = calculateReadingTime(processedBlog.content);
+
+        // Normalize badges (lowercase, dedupe, limit)
+        const normalizedBadges = normalizeBadges(processedBlog.badges || processedBlog.tags || []);
+
+        // Parse publishedAt date or use current time
+        let publishedAt = new Date();
+        if (processedBlog.publishedAt) {
+            const parsedDate = new Date(processedBlog.publishedAt);
+            if (!isNaN(parsedDate.getTime())) {
+                publishedAt = parsedDate;
+            }
+        }
+
+        // Validate category
+        const validCategories = ['tech', 'life'];
+        const category = validCategories.includes(processedBlog.category?.toLowerCase()) 
+            ? processedBlog.category.toLowerCase() 
+            : 'tech';
+
+        // Validate status
+        const validStatuses = ['draft', 'published'];
+        const status = validStatuses.includes(processedBlog.status?.toLowerCase())
+            ? processedBlog.status.toLowerCase()
+            : 'published';
+
         // Prepare blog data for saving
         const blogToSave = {
             title: processedBlog.title,
             content: processedBlog.content,
             description: processedBlog.description || '',
-            tags: processedBlog.tags || [],
+            tags: processedBlog.tags || [], // Keep for backward compatibility
+            badges: normalizedBadges,
+            category: category,
+            publishedAt: publishedAt,
+            status: status,
+            readingTimeMinutes: readingTimeMinutes,
             author: session.user.username,
-            createdAt: new Date(),
-            updatedAt: new Date(),
             slug: slug,
-            published: true // You can make this configurable
+            published: status === 'published' // Keep for backward compatibility
         };
 
         console.log('💾 Saving blog to database:', {
             title: blogToSave.title,
             slug: blogToSave.slug,
             author: blogToSave.author,
-            tagsCount: blogToSave.tags.length
+            category: blogToSave.category,
+            badgesCount: blogToSave.badges.length,
+            status: blogToSave.status,
+            readingTimeMinutes: blogToSave.readingTimeMinutes,
+            publishedAt: blogToSave.publishedAt
         });
 
         // Create a new Post document
@@ -198,6 +252,11 @@ export async function POST(request)
                 slug: savedPost.slug,
                 description: savedPost.description,
                 tags: savedPost.tags,
+                badges: savedPost.badges,
+                category: savedPost.category,
+                status: savedPost.status,
+                publishedAt: savedPost.publishedAt,
+                readingTimeMinutes: savedPost.readingTimeMinutes,
                 author: savedPost.author,
                 createdAt: savedPost.createdAt,
                 updatedAt: savedPost.updatedAt

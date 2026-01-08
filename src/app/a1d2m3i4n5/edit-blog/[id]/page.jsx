@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation';
 import BlogEditor from '@/components/Blog/BlogEditor';
 import LoadingSpinner from '@/components/UI/LoadingSpinner';
 import LoginForm from '@/components/Auth/LoginForm';
+import { getTechBadges, getLifeBadges, getBadgeDisplayName } from '@/data/badge-data';
 
 export default function EditBlogPost() {
     const { isAuthenticated, isLoading } = useAuth();
@@ -16,13 +17,18 @@ export default function EditBlogPost() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [fetching, setFetching] = useState(true);
     const [editorMode, setEditorMode] = useState('rich');
+    const [customBadgeInput, setCustomBadgeInput] = useState('');
     
     const [blogData, setBlogData] = useState({
         title: '',
         description: '',
         content: '',
         tags: '',
-        slug: ''
+        slug: '',
+        category: 'tech',
+        badges: [],
+        publishedAt: '',
+        status: 'published'
     });
 
     useEffect(() => {
@@ -38,9 +44,21 @@ export default function EditBlogPost() {
             if (!response.ok) throw new Error('Failed to fetch blog post');
             
             const data = await response.json();
+            
+            // Format publishedAt for datetime-local input
+            let formattedPublishedAt = '';
+            if (data.publishedAt) {
+                const date = new Date(data.publishedAt);
+                formattedPublishedAt = date.toISOString().slice(0, 16);
+            }
+            
             setBlogData({
                 ...data,
-                tags: Array.isArray(data.tags) ? data.tags.join(', ') : data.tags || ''
+                tags: Array.isArray(data.tags) ? data.tags.join(', ') : data.tags || '',
+                badges: Array.isArray(data.badges) ? data.badges : [],
+                category: data.category || 'tech',
+                status: data.status || 'published',
+                publishedAt: formattedPublishedAt
             });
         } catch (error) {
             console.error('Error fetching blog:', error);
@@ -66,6 +84,58 @@ export default function EditBlogPost() {
         }));
     };
 
+    // Toggle a preset badge
+    const toggleBadge = (badgeKey) => {
+        setBlogData(prev => {
+            const currentBadges = prev.badges || [];
+            if (currentBadges.includes(badgeKey)) {
+                return { ...prev, badges: currentBadges.filter(b => b !== badgeKey) };
+            } else {
+                if (currentBadges.length >= 12) {
+                    alert('Maximum 12 badges allowed');
+                    return prev;
+                }
+                return { ...prev, badges: [...currentBadges, badgeKey] };
+            }
+        });
+    };
+
+    // Add custom badge
+    const addCustomBadge = (e) => {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            const badge = customBadgeInput.toLowerCase().trim();
+            if (badge && badge.length <= 24 && !blogData.badges.includes(badge)) {
+                if (blogData.badges.length >= 12) {
+                    alert('Maximum 12 badges allowed');
+                    return;
+                }
+                setBlogData(prev => ({
+                    ...prev,
+                    badges: [...prev.badges, badge]
+                }));
+                setCustomBadgeInput('');
+            }
+        }
+    };
+
+    // Remove a badge
+    const removeBadge = (badgeKey) => {
+        setBlogData(prev => ({
+            ...prev,
+            badges: prev.badges.filter(b => b !== badgeKey)
+        }));
+    };
+
+    // Get preset badges based on category
+    const getPresetBadges = () => {
+        if (blogData.category === 'tech') {
+            return getTechBadges();
+        } else {
+            return getLifeBadges();
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -84,7 +154,15 @@ export default function EditBlogPost() {
                 },
                 body: JSON.stringify({
                     id,
-                    ...blogData
+                    title: blogData.title,
+                    description: blogData.description,
+                    content: blogData.content,
+                    tags: blogData.tags,
+                    slug: blogData.slug,
+                    category: blogData.category,
+                    badges: blogData.badges,
+                    status: blogData.status,
+                    publishedAt: blogData.publishedAt || undefined
                 }),
             });
 
@@ -195,6 +273,141 @@ export default function EditBlogPost() {
                             rows={3}
                             className="w-full px-4 py-3 bg-[var(--background)] border border-[var(--border-color)] rounded-xl text-[var(--text-color)] focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)]/20 transition-all duration-200"
                         />
+                    </div>
+
+                    {/* Category & Status Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Category Field */}
+                        <div>
+                            <label className="block text-lg font-semibold text-[var(--text-color)] mb-3">
+                                Category
+                            </label>
+                            <div className="flex bg-[var(--background)] border border-[var(--border-color)] rounded-xl p-1">
+                                {['tech', 'life'].map((cat) => (
+                                    <button
+                                        key={cat}
+                                        type="button"
+                                        onClick={() => setBlogData(prev => ({ ...prev, category: cat }))}
+                                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                            blogData.category === cat
+                                                ? 'bg-[var(--main-color)] text-white'
+                                                : 'text-[var(--text-color)] hover:bg-[var(--main-color)]/10'
+                                        }`}
+                                    >
+                                        {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Status Field */}
+                        <div>
+                            <label className="block text-lg font-semibold text-[var(--text-color)] mb-3">
+                                Status
+                            </label>
+                            <div className="flex bg-[var(--background)] border border-[var(--border-color)] rounded-xl p-1">
+                                {['published', 'draft'].map((st) => (
+                                    <button
+                                        key={st}
+                                        type="button"
+                                        onClick={() => setBlogData(prev => ({ ...prev, status: st }))}
+                                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                                            blogData.status === st
+                                                ? st === 'published' 
+                                                    ? 'bg-green-500 text-white' 
+                                                    : 'bg-yellow-500 text-white'
+                                                : 'text-[var(--text-color)] hover:bg-[var(--main-color)]/10'
+                                        }`}
+                                    >
+                                        {st.charAt(0).toUpperCase() + st.slice(1)}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Published At Field */}
+                        <div>
+                            <label className="block text-lg font-semibold text-[var(--text-color)] mb-3">
+                                Publish Date
+                            </label>
+                            <input
+                                type="datetime-local"
+                                name="publishedAt"
+                                value={blogData.publishedAt}
+                                onChange={handleInputChange}
+                                className="w-full px-4 py-2.5 bg-[var(--background)] border border-[var(--border-color)] rounded-xl text-[var(--text-color)] focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)]/20 transition-all duration-200"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Badges Field */}
+                    <div>
+                        <label className="block text-lg font-semibold text-[var(--text-color)] mb-3">
+                            Badges <span className="text-sm font-normal opacity-70">(click to select, max 12)</span>
+                        </label>
+                        
+                        {/* Preset Badges */}
+                        <div className="mb-4">
+                            <p className="text-sm text-[var(--text-color)] opacity-60 mb-2">
+                                Preset badges for {blogData.category === 'tech' ? 'Tech' : 'Life'}:
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {getPresetBadges().map((badge) => (
+                                    <button
+                                        key={badge.key}
+                                        type="button"
+                                        onClick={() => toggleBadge(badge.key)}
+                                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                                            blogData.badges?.includes(badge.key)
+                                                ? 'bg-[var(--main-color)] text-white'
+                                                : 'bg-[var(--main-color)]/10 text-[var(--main-color)] hover:bg-[var(--main-color)]/20'
+                                        }`}
+                                    >
+                                        {badge.displayName}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Custom Badge Input */}
+                        <div className="mb-4">
+                            <input
+                                type="text"
+                                value={customBadgeInput}
+                                onChange={(e) => setCustomBadgeInput(e.target.value)}
+                                onKeyDown={addCustomBadge}
+                                placeholder="Add custom badge (press Enter or comma)"
+                                className="w-full px-4 py-2.5 bg-[var(--background)] border border-[var(--border-color)] rounded-xl text-[var(--text-color)] placeholder-[var(--text-color)]/50 focus:outline-none focus:border-[var(--main-color)] focus:ring-2 focus:ring-[var(--main-color)]/20 transition-all duration-200"
+                            />
+                        </div>
+
+                        {/* Selected Badges Display */}
+                        {blogData.badges && blogData.badges.length > 0 && (
+                            <div>
+                                <p className="text-sm text-[var(--text-color)] opacity-60 mb-2">
+                                    Selected badges ({blogData.badges.length}/12):
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                    {blogData.badges.map((badge) => (
+                                        <span
+                                            key={badge}
+                                            className="px-3 py-1.5 bg-[var(--main-color)] text-white rounded-full text-sm font-medium flex items-center gap-2"
+                                        >
+                                            {getBadgeDisplayName(badge)}
+                                            <button
+                                                type="button"
+                                                onClick={() => removeBadge(badge)}
+                                                className="hover:opacity-70 transition-opacity"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Content Editor */}
